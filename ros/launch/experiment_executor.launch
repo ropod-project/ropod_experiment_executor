@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="ropod_experiment_executor" type="experiment_executor" name="experiment_executor" ns="/ropod" output="screen">
+        <param name="command_config_file" value="$(find ropod_experiment_executor)/config/commands.yaml" />
+        <param name="execute_cmd_topic" value="/ropod/execute_command" />
+        <param name="pause_cmd_topic" value="/ropod/pause_command" />
+        <param name="continue_cmd_topic" value="/ropod/continue_command" />
+        <param name="cancel_cmd_topic" value="/ropod/cancel_command" />
+    </node>
+</launch>
