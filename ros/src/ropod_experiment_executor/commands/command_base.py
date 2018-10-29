@@ -1,33 +1,26 @@
 from __future__ import print_function
-from abc import abstractmethod
 import rospy
+import smach
 
 from ropod_ros_msgs.msg import CommandFeedback
 
-class CommandBase(object):
-    def __init__(self, name):
+class CommandBase(smach.State):
+    def __init__(self, name, outcomes,
+                 input_keys=list(), output_keys=list()):
+        smach.State.__init__(self, outcomes=outcomes,
+                             input_keys=input_keys,
+                             output_keys=output_keys)
+        self.sm_id = ''
         self.name = name
-        self._executing = False
-        self._preempted = False
+        self.retry_count = 0
+        self.executing = False
+        self.succeeded = False
+        self.robot_name = ''
         self.cmd_feedback_topic = rospy.get_param('/cmd_feedback_topic', '/ropod/cmd_feedback')
         self.feedback_pub = rospy.Publisher(self.cmd_feedback_topic, CommandFeedback, queue_size=10)
 
-    @abstractmethod
-    def execute(self, params=None):
+    def execute(self, userdata):
         pass
-
-    def pause(self):
-        print('[{0}] Pausing command'.format(self.name))
-        self._executing = False
-
-    def continue_execution(self):
-        print('[{0}] Continuing command'.format(self.name))
-        self._executing = True
-
-    def cancel(self):
-        print('[{0}] Cancelling command'.format(self.name))
-        self._preempted = True
-        self._executing = False
 
     def send_feedback(self, feedback_msg):
         self.feedback_pub.publish(feedback_msg)
