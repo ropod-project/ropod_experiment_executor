@@ -1,9 +1,9 @@
 from __future__ import print_function
 import oyaml as yaml
 
-from experiment_library.experiment_config.sm_params import (StateParams,
-                                                            StateMachineParams,
-                                                            SMFileKeys)
+from experiment_executor.experiment_config.sm_params import (StateParams,
+                                                             StateMachineParams,
+                                                             SMFileKeys)
 
 class SMLoader(object):
     '''An interface for loading state machine configuration files
