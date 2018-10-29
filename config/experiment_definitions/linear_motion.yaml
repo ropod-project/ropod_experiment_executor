@@ -19,7 +19,7 @@ state_descriptions:
         arguments:
             - argument:
                 name: vel_x
-                value: 0.1
+                value: 0.2
             - argument:
                 name: vel_y
                 value: 0.0
@@ -49,7 +49,7 @@ state_descriptions:
                 value: 0.0
             - argument:
                 name: vel_y
-                value: 0.1
+                value: -0.2
             - argument:
                 name: vel_theta
                 value: 0.0
@@ -73,7 +73,7 @@ state_descriptions:
         arguments:
             - argument:
                 name: vel_x
-                value: -0.1
+                value: -0.2
             - argument:
                 name: vel_y
                 value: 0.0
@@ -103,7 +103,7 @@ state_descriptions:
                 value: 0.0
             - argument:
                 name: vel_y
-                value: -0.1
+                value: 0.2
             - argument:
                 name: vel_theta
                 value: 0.0
