@@ -1,9 +1,6 @@
 #!/usr/bin/python
 from importlib import import_module
-
 import smach
-
-from experiment_executor.experiment_config.sm_loader import SMLoader
 
 class StateMachine(smach.StateMachine):
     '''An interface for creating state machines from state machine description files
