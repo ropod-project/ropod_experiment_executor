@@ -1,6 +1,6 @@
 parent_module_name: 'ropod_experiment_executor.commands'
 commands:
-    - name: forward
+    - name: GO_FORWARD
       type: base_motion
       args:
           vel_x: 0.1
@@ -8,7 +8,7 @@ commands:
           vel_theta: 0.0
           vel_topic: /ropod/cmd_vel
           duration: 3.0
-    - name: backward
+    - name: GO_BACKWARD
       type: base_motion
       args:
           vel_x: -0.1
@@ -16,7 +16,7 @@ commands:
           vel_theta: 0.0
           vel_topic: /ropod/cmd_vel
           duration: 3.0
-    - name: left
+    - name: GO_LEFT
       type: base_motion
       args:
           vel_x: 0.0
@@ -24,7 +24,7 @@ commands:
           vel_theta: 0.0
           vel_topic: /ropod/cmd_vel
           duration: 3.0
-    - name: right
+    - name: GO_RIGHT
       type: base_motion
       args:
           vel_x: 0.0
@@ -32,7 +32,7 @@ commands:
           vel_theta: 0.0
           vel_topic: /ropod/cmd_vel
           duration: 3.0
-    - name: right_turn
+    - name: TURN_RIGHT
       type: base_motion
       args:
           vel_x: 0.0
@@ -40,7 +40,7 @@ commands:
           vel_theta: 0.3
           vel_topic: /ropod/cmd_vel
           duration: 3.0
-    - name: left_turn
+    - name: TURN_LEFT
       type: base_motion
       args:
           vel_x: 0.0
