@@ -3,6 +3,7 @@ import time
 import rospy
 from geometry_msgs.msg import Twist
 
+from ropod_ros_msgs.msg import CommandFeedback
 from ropod_experiment_executor.commands.command_base import CommandBase
 
 class BaseMotion(CommandBase):
@@ -31,6 +32,10 @@ class BaseMotion(CommandBase):
             self.vel_x = params.linear.x
             self.vel_y = params.linear.y
             self.vel_theta = params.angular.z
+
+        feedback_msg = CommandFeedback()
+        feedback_msg.command_name = self.name
+        feedback_msg.state = CommandFeedback.ONGOING
 
         elapsed = 0.
         elapsed_before_pause = 0.
@@ -61,6 +66,7 @@ class BaseMotion(CommandBase):
                     twist_msg.linear.y = 0.
                     twist_msg.angular.z = 0.
                     self.vel_pub.publish(twist_msg)
+            self.send_feedback(feedback_msg)
             rospy.sleep(0.05)
 
         print('[{0}] Stopping motion'.format(self.name))
@@ -68,6 +74,9 @@ class BaseMotion(CommandBase):
         twist_msg.linear.y = 0.
         twist_msg.angular.z = 0.
         self.vel_pub.publish(twist_msg)
+
+        feedback_msg.state = CommandFeedback.FINISHED
+        self.send_feedback(feedback_msg)
 
         self._executing = False
         if self._preempted:
