@@ -20,7 +20,6 @@ class ExperimentExecutorInterface(object):
     def execute_experiment(self, msg):
         sm_config_file = os.path.join(self.experiment_config_path, msg.experiment_type + '.yaml')
         experiment_data = SMLoader.load_sm(sm_config_file)
-        print(experiment_data.outcomes)
         state_machine = StateMachine(experiment_data)
         state_machine.execute()
 
