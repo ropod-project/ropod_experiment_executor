@@ -2,7 +2,7 @@
 import os
 
 import rospy
-from ropod_ros_msgs.msg import ExecuteExperiment
+from ropod_ros_msgs.msg import ExecuteExperiment, ExperimentFeedback
 
 from experiment_executor.experiment_config.sm_loader import SMLoader
 from experiment_executor.experiment_config.state_machine_creator import StateMachine
@@ -12,16 +12,32 @@ class ExperimentExecutorInterface(object):
         self.experiment_config_path = rospy.get_param('~experiment_config_path', '')
         execute_experiment_topic = rospy.get_param('~execute_experiment_topic',
                                                    '/ropod/execute_experiment')
+        experiment_feedback_topic = rospy.get_param('~experiment_feedback_topic',
+                                                    '/ropod/experiment_feedback')
 
         self.execute_experiment_sub = rospy.Subscriber(execute_experiment_topic,
                                                        ExecuteExperiment,
                                                        self.execute_experiment)
 
+        self.experiment_feedback_pub = rospy.Publisher(experiment_feedback_topic,
+                                                       ExperimentFeedback,
+                                                       queue_size=1)
+
+        self.experiment_feedback_msg = ExperimentFeedback()
+
     def execute_experiment(self, msg):
         sm_config_file = os.path.join(self.experiment_config_path, msg.experiment_type + '.yaml')
         experiment_data = SMLoader.load_sm(sm_config_file)
         state_machine = StateMachine(experiment_data)
-        state_machine.execute()
+        result = state_machine.execute()
+
+        self.experiment_feedback_msg.stamp = rospy.Time.now()
+        self.experiment_feedback_msg.experiment_type = msg.experiment_type
+        if result:
+            self.experiment_feedback_msg.result = ExperimentFeedback.FINISHED
+        else:
+            self.experiment_feedback_msg.result = ExperimentFeedback.FAILED
+        self.experiment_feedback_pub.publish(self.experiment_feedback_msg)
 
 if __name__ == '__main__':
     rospy.init_node('experiment_executor')
