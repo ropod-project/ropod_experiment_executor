@@ -43,6 +43,8 @@ class BaseMotion(CommandBase):
             twist_msg.linear.y = self.vel_y
             twist_msg.angular.z = self.vel_theta
             self.vel_pub.publish(twist_msg)
+
+            feedback_msg.stamp = rospy.Time.now()
             self.send_feedback(feedback_msg)
             elapsed = time.time() - start_time
             rospy.sleep(0.05)
@@ -53,6 +55,7 @@ class BaseMotion(CommandBase):
         twist_msg.angular.z = 0.
         self.vel_pub.publish(twist_msg)
 
+        feedback_msg.stamp = rospy.Time.now()
         feedback_msg.state = CommandFeedback.FINISHED
         self.send_feedback(feedback_msg)
         return 'done'
