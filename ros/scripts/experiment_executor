@@ -27,6 +27,11 @@ class ExperimentExecutorInterface(object):
 
     def execute_experiment(self, msg):
         sm_config_file = os.path.join(self.experiment_config_path, msg.experiment_type + '.yaml')
+        if not os.path.isfile(sm_config_file):
+            print('[experiment_executor] Received an unknown experiment request: {0}'.format(msg.experiment_type))
+            print('[experiment_executor] Ignoring request')
+            return
+
         experiment_data = SMLoader.load_sm(sm_config_file)
         state_machine = StateMachine(experiment_data)
         result = state_machine.execute()
