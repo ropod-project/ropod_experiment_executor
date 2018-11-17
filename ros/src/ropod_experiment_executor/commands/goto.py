@@ -4,7 +4,7 @@ import rospy
 
 from ropod_ros_msgs.msg import Action, TaskProgressGOTO, Status
 from ropod_ros_msgs.msg import Area
-from ropod_ros_msgs.msg import CommandFeedback
+from ropod_ros_msgs.msg import CommandFeedback, StateInfo
 from ropod_experiment_executor.commands.command_base import CommandBase
 
 class GoTo(CommandBase):
@@ -67,6 +67,7 @@ class GoTo(CommandBase):
         feedback_msg.stamp = rospy.Time.now()
         feedback_msg.state = CommandFeedback.FINISHED
         self.send_feedback(feedback_msg)
+        self.send_state(StateInfo.SUCCESS)
         return 'done'
 
     def action_progress_cb(self, progress_msg):
