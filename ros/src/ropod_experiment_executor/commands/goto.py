@@ -3,7 +3,7 @@ import time
 import rospy
 
 from ropod_ros_msgs.msg import Action, TaskProgressGOTO, Status
-from ropod_ros_msgs.msg import Area
+from ropod_ros_msgs.msg import Area, Waypoint
 from ropod_ros_msgs.msg import CommandFeedback, StateInfo
 from ropod_experiment_executor.commands.command_base import CommandBase
 
@@ -36,22 +36,32 @@ class GoTo(CommandBase):
     def execute(self, userdata):
         '''Sends a navigation goal for each area in self.areas.
         '''
-        action_msg = Action()
-        action_msg.type = 'GOTO'
-        action_msg.start_floor = self.area_floor
-        action_msg.goal_floor = self.area_floor
-
         feedback_msg = CommandFeedback()
         feedback_msg.command_name = self.name
         feedback_msg.state = CommandFeedback.ONGOING
 
-        for area in self.areas:
+        for area_data in self.areas:
+            area = area_data['area_name']
             print('[{0}] Going to {1}'.format(self.name, area))
 
+            action_msg = Action()
+            action_msg.type = 'GOTO'
+            action_msg.start_floor = self.area_floor
+            action_msg.goal_floor = self.area_floor
+
             area_msg = Area()
-            area_msg.area_id = area
-            area_msg.name = area
+            area_msg.area_id = area_data['area_id']
+            area_msg.name = area_data['area_name']
+            area_msg.type = area_data['area_type']
             area_msg.floor_number = self.area_floor
+
+            waypoint_msg = Waypoint()
+            waypoint_msg.area_id = area_data['waypoint_id']
+            waypoint_msg.semantic_id = area_data['waypoint_name']
+            waypoint_msg.floor_number = self.area_floor
+
+            area_msg.waypoints.append(waypoint_msg)
+
             action_msg.areas = [area_msg]
             self.go_to_action_pub.publish(action_msg)
 

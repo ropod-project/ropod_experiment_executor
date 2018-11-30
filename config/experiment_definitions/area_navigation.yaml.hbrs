@@ -1,0 +1,47 @@
+# Description: Defines a state machine for a simple area navigation experiment
+# Author: Alex Mitrevski
+# Email: aleksandar.mitrevski@h-brs.de
+sm_id: area_navigation
+states: [GO_TO]
+outcomes: [DONE, FAILED]
+state_descriptions:
+    - state:
+        name: GO_TO
+        state_module_name: ropod_experiment_executor.commands.goto
+        state_class_name: GoTo
+        transitions:
+            - transition:
+                name: done
+                state: DONE
+            - transition:
+                name: failed
+                state: FAILED
+        arguments:
+            - argument:
+                name: areas
+                value:
+                    - BRSU_C_L0_C9
+                    - BRSU_C_L0_C8
+                    - BRSU_C_L0_C7
+                    - BRSU_C_L0_C6
+                    - BRSU_C_L0_C5
+                    - BRSU_C_L0_C4
+                    - BRSU_C_L0_C3
+                    - BRSU_C_L0_C2
+                    - BRSU_C_L0_C1
+                    - BRSU_A_L0_A4
+                    - BRSU_A_L0_A3
+                    - BRSU_A_L0_A2
+                    - BRSU_A_L0_A1
+            - argument:
+                name: area_floor
+                value: 0
+            - argument:
+                name: go_to_action_topic
+                value: /ropod_task_executor/GOTO
+            - argument:
+                name: go_to_progress_topic
+                value: /task_progress/goto
+            - argument:
+                name: timeout_s
+                value: 120.0
