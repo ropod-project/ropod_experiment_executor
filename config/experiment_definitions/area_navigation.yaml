@@ -24,56 +24,56 @@ state_descriptions:
                         area_id: '3130'
                         area_name: AMK_B_L-1_C13
                         area_type: corridor
-                        waypoint_id: '4848'
-                        waypoint_name: AMK_B_L-1_C13_LA2
+                        subarea_id: '4848'
+                        subarea_name: AMK_B_L-1_C13_LA2
                     -
                         area_id: '3131'
                         area_name: AMK_B_L-1_C14
                         area_type: corridor
-                        waypoint_id: '4847'
-                        waypoint_name: AMK_B_L-1_C14_LA1
+                        subarea_id: '4847'
+                        subarea_name: AMK_B_L-1_C14_LA1
                     -
                         area_id: '3133'
                         area_name: AMK_B_L-1_C15
                         area_type: junction
-                        waypoint_id: '4870'
-                        waypoint_name: AMK_B_L-1_C15_LA1
+                        subarea_id: '4870'
+                        subarea_name: AMK_B_L-1_C15_LA1
                     -
                         area_id: '3134'
                         area_name: AMK_B_L-1_C16
                         area_type: corridor
-                        waypoint_id: '4867'
-                        waypoint_name: AMK_B_L-1_C16_LA1
+                        subarea_id: '4867'
+                        subarea_name: AMK_B_L-1_C16_LA1
                     -
                         area_id: '3135'
                         area_name: AMK_B_L-1_C17
                         area_type: junction
-                        waypoint_id: '4872'
-                        waypoint_name: AMK_B_L-1_C17_LA1
+                        subarea_id: '4872'
+                        subarea_name: AMK_B_L-1_C17_LA1
                     -
                         area_id: '3138'
                         area_name: AMK_B_L-1_C5
                         area_type: junction
-                        waypoint_id: '4881'
-                        waypoint_name: AMK_B_L-1_C5_LA1
+                        subarea_id: '4881'
+                        subarea_name: AMK_B_L-1_C5_LA1
                     -
                         area_id: '3139'
                         area_name: AMK_B_L-1_C4
                         area_type: corridor
-                        waypoint_id: '4880'
-                        waypoint_name: AMK_B_L-1_C4_LA1
+                        subarea_id: '4880'
+                        subarea_name: AMK_B_L-1_C4_LA1
                     -
                         area_id: '3140'
                         area_name: AMK_B_L-1_C3
                         area_type: corridor
-                        waypoint_id: '4884'
-                        waypoint_name: AMK_B_L-1_C3_LA1
+                        subarea_id: '4884'
+                        subarea_name: AMK_B_L-1_C3_LA1
                     -
                         area_id: '3142'
                         area_name: AMK_B_L-1_C2
                         area_type: corridor
-                        waypoint_id: '4883'
-                        waypoint_name: AMK_B_L-1_C2_LA1
+                        subarea_id: '4883'
+                        subarea_name: AMK_B_L-1_C2_LA1
             - argument:
                 name: area_floor
                 value: -1
