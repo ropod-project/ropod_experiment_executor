@@ -3,7 +3,7 @@ import time
 import rospy
 
 from ropod_ros_msgs.msg import Action, TaskProgressGOTO, Status
-from ropod_ros_msgs.msg import Area, Waypoint
+from ropod_ros_msgs.msg import Area, SubArea
 from ropod_ros_msgs.msg import CommandFeedback, StateInfo
 from ropod_experiment_executor.commands.command_base import CommandBase
 
@@ -50,17 +50,17 @@ class GoTo(CommandBase):
             action_msg.goal_floor = self.area_floor
 
             area_msg = Area()
-            area_msg.area_id = area_data['area_id']
+            area_msg.id = area_data['area_id']
             area_msg.name = area_data['area_name']
             area_msg.type = area_data['area_type']
             area_msg.floor_number = self.area_floor
 
-            waypoint_msg = Waypoint()
-            waypoint_msg.area_id = area_data['waypoint_id']
-            waypoint_msg.semantic_id = area_data['waypoint_name']
-            waypoint_msg.floor_number = self.area_floor
+            subarea_msg = SubArea()
+            subarea_msg.id = area_data['subarea_id']
+            subarea_msg.name = area_data['subarea_name']
+            subarea_msg.floor_number = self.area_floor
 
-            area_msg.waypoints.append(waypoint_msg)
+            area_msg.sub_areas.append(subarea_msg)
 
             action_msg.areas = [area_msg]
             self.go_to_action_pub.publish(action_msg)
