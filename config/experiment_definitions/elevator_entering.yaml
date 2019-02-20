@@ -35,7 +35,7 @@ state_descriptions:
                         subarea_name: BRSU_A_L2_C1_LA1
             - argument:
                 name: area_floor
-                value: 0
+                value: 2
             - argument:
                 name: go_to_action_topic
                 value: /ropod_task_executor/GOTO
