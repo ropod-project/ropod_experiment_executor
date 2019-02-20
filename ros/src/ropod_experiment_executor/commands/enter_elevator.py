@@ -38,7 +38,7 @@ class EnterElevator(CommandBase):
         self.action_completed = False
 
         # wait for a while to give the action publishers time to initialise
-        rospy.sleep(0.1)
+        rospy.sleep(1.)
 
     def execute(self, userdata):
         '''Sends a WAIT_FOR_ELEVATOR action and waits for it to finish;

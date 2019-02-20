@@ -32,7 +32,7 @@ class GoTo(CommandBase):
         self.current_area_idx = 0
 
         # wait for a while to give the action publisher time to initialise
-        rospy.sleep(0.1)
+        rospy.sleep(1.)
 
     def execute(self, userdata):
         '''Sends a navigation goal for each area in self.areas.
