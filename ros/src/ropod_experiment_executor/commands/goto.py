@@ -17,7 +17,6 @@ class GoTo(CommandBase):
     '''
     def __init__(self, name, **kwargs):
         super(GoTo, self).__init__(name, outcomes=['done', 'failed'])
-        print('Creating state {0}'.format(name))
 
         self.areas = kwargs.get('areas', list())
         self.area_floor = kwargs.get('area_floor', 0)
@@ -29,6 +28,8 @@ class GoTo(CommandBase):
                                                    TaskProgressGOTO,
                                                    self.action_progress_cb)
         self.action_completed = False
+        self.area_list = []
+        self.current_area_idx = 0
 
         # wait for a while to give the action publisher time to initialise
         rospy.sleep(0.1)
@@ -36,18 +37,21 @@ class GoTo(CommandBase):
     def execute(self, userdata):
         '''Sends a navigation goal for each area in self.areas.
         '''
+        self.area_list = []
+        self.current_area_idx = 0
+
         feedback_msg = CommandFeedback()
         feedback_msg.command_name = self.name
         feedback_msg.state = CommandFeedback.ONGOING
 
+        action_msg = Action()
+        action_msg.type = 'GOTO'
+        action_msg.start_floor = self.area_floor
+        action_msg.goal_floor = self.area_floor
+
         for area_data in self.areas:
             area = area_data['area_name']
-            print('[{0}] Going to {1}'.format(self.name, area))
-
-            action_msg = Action()
-            action_msg.type = 'GOTO'
-            action_msg.start_floor = self.area_floor
-            action_msg.goal_floor = self.area_floor
+            self.area_list.append(area)
 
             area_msg = Area()
             area_msg.id = area_data['area_id']
@@ -61,18 +65,18 @@ class GoTo(CommandBase):
             subarea_msg.floor_number = self.area_floor
 
             area_msg.sub_areas.append(subarea_msg)
+            action_msg.areas.append(area_msg)
 
-            action_msg.areas = [area_msg]
-            self.go_to_action_pub.publish(action_msg)
-
-            self.action_completed = False
-            elapsed = 0.
-            start_time = time.time()
-            while elapsed < self.timeout_s and not self.action_completed:
-                feedback_msg.stamp = rospy.Time.now()
-                self.send_feedback(feedback_msg)
-                elapsed = time.time() - start_time
-                rospy.sleep(0.05)
+        print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
+        self.go_to_action_pub.publish(action_msg)
+        self.action_completed = False
+        elapsed = 0.
+        start_time = time.time()
+        while elapsed < self.timeout_s and not self.action_completed:
+            feedback_msg.stamp = rospy.Time.now()
+            self.send_feedback(feedback_msg)
+            elapsed = time.time() - start_time
+            rospy.sleep(0.05)
 
         feedback_msg.stamp = rospy.Time.now()
         feedback_msg.state = CommandFeedback.FINISHED
@@ -86,3 +90,7 @@ class GoTo(CommandBase):
         '''
         if progress_msg.status.status_code == Status.COMPLETED:
             self.action_completed = True
+        elif progress_msg.status.status_code == Status.ONGOING:
+            self.current_area_idx += 1
+            print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
+            self.send_state(StateInfo.SUCCESS)
