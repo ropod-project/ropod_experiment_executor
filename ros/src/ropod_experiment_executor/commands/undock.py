@@ -11,9 +11,9 @@ class UnDock(CommandBase):
     '''
     An interface for performing undocking
 
-    @author Alex Mitrevski
-    @maintainer Alex Mitrevski
-    @contact aleksandar.mitrevski@h-brs.de
+    @author Santosh Thoduka
+    @maintainer Santosh Thoduka
+    @contact santosh.thoduka@h-brs.de
 
     '''
     def __init__(self, name, **kwargs):

@@ -1,6 +1,6 @@
 # Description: Defines a state machine for a undocking
-# Author: Alex Mitrevski
-# Email: aleksandar.mitrevski@h-brs.de
+# Author: Santosh Thoduka
+# Email: santosh.thoduka@h-brs.de
 sm_id: undock
 states: [UNDOCK]
 outcomes: [DONE, FAILED]
