@@ -1,0 +1,28 @@
+# Description: Defines a state machine for a docking
+# Author: Alex Mitrevski
+# Email: aleksandar.mitrevski@h-brs.de
+sm_id: dock
+states: [DOCK]
+outcomes: [DONE, FAILED]
+state_descriptions:
+    - state:
+        name: DOCK
+        state_module_name: ropod_experiment_executor.commands.dock
+        state_class_name: Dock
+        transitions:
+            - transition:
+                name: done
+                state: DONE
+            - transition:
+                name: failed
+                state: FAILED
+        arguments:
+            - argument:
+                name: area_id
+                value: MobidikArea1
+            - argument:
+                name: area_name
+                value: orient_wp_MobidikArea1
+            - argument:
+                name: timeout_s
+                value: 120.0
