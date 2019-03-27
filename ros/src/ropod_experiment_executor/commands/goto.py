@@ -35,7 +35,7 @@ class GoTo(CommandBase):
         self.number_of_waypoints = 0
 
         # wait for a while to give the action publisher time to initialise
-        rospy.sleep(1.0)
+        rospy.sleep(1.)
 
     def execute(self, userdata):
         '''Sends a navigation goal for each area in self.areas.
