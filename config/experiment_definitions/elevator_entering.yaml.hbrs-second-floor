@@ -1,0 +1,80 @@
+# Description: Defines a state machine for an experiment in which a robot
+#              navigates to an elevator and then tries to enter it
+# Author: Alex Mitrevski
+# Email: aleksandar.mitrevski@h-brs.de
+sm_id: elevator_entering
+states: [GO_TO, ENTER_ELEVATOR]
+outcomes: [DONE, FAILED]
+state_descriptions:
+    - state:
+        name: GO_TO
+        state_module_name: ropod_experiment_executor.commands.goto
+        state_class_name: GoTo
+        transitions:
+            - transition:
+                name: done
+                state: ENTER_ELEVATOR
+            - transition:
+                name: failed
+                state: FAILED
+        arguments:
+            - argument:
+                name: areas
+                value:
+                    -
+                        area_id: '170'
+                        area_name: BRSU_C_L2_C1
+                        area_type: corridor
+                        subarea_id: '157'
+                        subarea_name: BRSU_C_L2_C1_LA1
+                    -
+                        area_id: '179'
+                        area_name: BRSU_A_L2_C1
+                        area_type: corridor
+                        subarea_id: '159'
+                        subarea_name: BRSU_A_L2_C1_LA1
+            - argument:
+                name: area_floor
+                value: 2
+            - argument:
+                name: go_to_action_topic
+                value: /ropod_task_executor/GOTO
+            - argument:
+                name: go_to_progress_topic
+                value: /task_progress/goto
+            - argument:
+                name: timeout_s
+                value: 120.0
+    - state:
+        name: ENTER_ELEVATOR
+        state_module_name: ropod_experiment_executor.commands.enter_elevator
+        state_class_name: EnterElevator
+        transitions:
+            - transition:
+                name: done
+                state: DONE
+            - transition:
+                name: failed
+                state: FAILED
+        arguments:
+            - argument:
+                name: area_floor
+                value: 2
+            - argument:
+                name: elevator_id
+                value: 121
+            - argument:
+                name: elevator_door_id
+                value: 96
+            - argument:
+                name: wait_for_elevator_action_topic
+                value: /ropod_task_executor/WAIT_FOR_ELEVATOR
+            - argument:
+                name: enter_elevator_action_topic
+                value: /ropod_task_executor/ENTER_ELEVATOR
+            - argument:
+                name: elevator_progress_topic
+                value: /task_progress/elevator
+            - argument:
+                name: timeout_s
+                value: 120.0
