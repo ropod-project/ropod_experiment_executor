@@ -59,13 +59,13 @@ state_descriptions:
         arguments:
             - argument:
                 name: area_floor
-                value: 2
+                value: 0
             - argument:
                 name: elevator_id
-                value: 1
+                value: 121
             - argument:
                 name: elevator_door_id
-                value: 1
+                value: 96
             - argument:
                 name: wait_for_elevator_action_topic
                 value: /ropod_task_executor/WAIT_FOR_ELEVATOR
