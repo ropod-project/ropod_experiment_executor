@@ -13,7 +13,7 @@ outcomes = ["DONE", "FAILED"]
         [state_descriptions.TURN_RIGHT.arguments]
             vel_x = 0.0
             vel_y = 0.0
-            vel_theta = 0.2
+            vel_theta = -0.3
             duration = 10.0
             vel_topic = "/ropod/cmd_vel"
     [state_descriptions.TURN_LEFT]
@@ -25,6 +25,6 @@ outcomes = ["DONE", "FAILED"]
         [state_descriptions.TURN_LEFT.arguments]
             vel_x = 0.0
             vel_y = 0.0
-            vel_theta = -0.2
+            vel_theta = 0.3
             duration = 10.0
             vel_topic = "/ropod/cmd_vel"
