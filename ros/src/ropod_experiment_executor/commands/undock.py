@@ -31,7 +31,7 @@ class UnDock(CommandBase):
         self.action_completed = False
 
         # wait for a while to give the action publisher time to initialise
-        rospy.sleep(0.1)
+        rospy.sleep(1.0)
 
     def execute(self, userdata):
         '''Sends a navigation goal for each area in self.areas.
