@@ -1,0 +1,30 @@
+sm_id = "in_place_rotation"
+states = ["TURN_RIGHT", "TURN_LEFT"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.TURN_RIGHT]
+        state_module_name = "ropod_experiment_executor.commands.base_motion"
+        state_class_name = "BaseMotion"
+        initial_state = true
+        [state_descriptions.TURN_RIGHT.transitions]
+            done = "TURN_LEFT"
+            failed = "FAILED"
+        [state_descriptions.TURN_RIGHT.arguments]
+            vel_x = 0.0
+            vel_y = 0.0
+            vel_theta = -0.3
+            duration = 10.0
+            vel_topic = "/ropod/cmd_vel"
+    [state_descriptions.TURN_LEFT]
+        state_module_name = "ropod_experiment_executor.commands.base_motion"
+        state_class_name = "BaseMotion"
+        [state_descriptions.TURN_LEFT.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.TURN_LEFT.arguments]
+            vel_x = 0.0
+            vel_y = 0.0
+            vel_theta = 0.3
+            duration = 10.0
+            vel_topic = "/ropod/cmd_vel"

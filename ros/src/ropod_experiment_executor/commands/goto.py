@@ -53,18 +53,18 @@ class GoTo(CommandBase):
         action_msg.goal_floor = self.area_floor
 
         for area_data in self.areas:
-            area = area_data['area_name']
+            area = area_data['area_name'].encode('ascii')
             self.area_list.append(area)
 
             area_msg = Area()
-            area_msg.id = area_data['area_id']
-            area_msg.name = area_data['area_name']
-            area_msg.type = area_data['area_type']
+            area_msg.id = area_data['area_id'].encode('ascii')
+            area_msg.name = area_data['area_name'].encode('ascii')
+            area_msg.type = area_data['area_type'].encode('ascii')
             area_msg.floor_number = self.area_floor
 
             subarea_msg = SubArea()
-            subarea_msg.id = area_data['subarea_id']
-            subarea_msg.name = area_data['subarea_name']
+            subarea_msg.id = area_data['subarea_id'].encode('ascii')
+            subarea_msg.name = area_data['subarea_name'].encode('ascii')
             subarea_msg.floor_number = self.area_floor
 
             area_msg.sub_areas.append(subarea_msg)

@@ -31,7 +31,7 @@ class UnDock(CommandBase):
         self.action_completed = False
 
         # wait for a while to give the action publisher time to initialise
-        rospy.sleep(0.1)
+        rospy.sleep(1.0)
 
     def execute(self, userdata):
         '''Sends a navigation goal for each area in self.areas.
@@ -48,7 +48,9 @@ class UnDock(CommandBase):
         area_msg = Area()
         area_msg.id = self.area_id
         area_msg.name = self.area_name
+        area_msg.sub_areas.append(SubArea())
         action_msg.areas.append(area_msg)
+        action_msg.sub_areas.append(SubArea())
 
         print('[{0}] UnDocking in area {1}'.format(self.name, self.area_id))
         self.undock_action_pub.publish(action_msg)

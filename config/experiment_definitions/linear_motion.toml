@@ -1,0 +1,54 @@
+sm_id = "linear_motion"
+states = ["GO_FORWARD", "GO_RIGHT", "GO_BACKWARD", "GO_LEFT"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.GO_FORWARD]
+        state_module_name = "ropod_experiment_executor.commands.base_motion"
+        state_class_name = "BaseMotion"
+        initial_state = true
+        [state_descriptions.GO_FORWARD.transitions]
+            done = "GO_RIGHT"
+            failed = "FAILED"
+        [state_descriptions.GO_FORWARD.arguments]
+            vel_x = 0.2
+            vel_y = 0.0
+            vel_theta = 0.0
+            duration = 3.0
+            vel_topic = "/ropod/cmd_vel"
+    [state_descriptions.GO_RIGHT]
+        state_module_name = "ropod_experiment_executor.commands.base_motion"
+        state_class_name = "BaseMotion"
+        [state_descriptions.GO_RIGHT.transitions]
+            done = "GO_BACKWARD"
+            failed = "FAILED"
+        [state_descriptions.GO_RIGHT.arguments]
+            vel_x = 0.0
+            vel_y = -0.2
+            vel_theta = 0.0
+            duration = 3.0
+            vel_topic = "/ropod/cmd_vel"
+    [state_descriptions.GO_BACKWARD]
+        state_module_name = "ropod_experiment_executor.commands.base_motion"
+        state_class_name = "BaseMotion"
+        [state_descriptions.GO_BACKWARD.transitions]
+            done = "GO_LEFT"
+            failed = "FAILED"
+        [state_descriptions.GO_BACKWARD.arguments]
+            vel_x = -0.2
+            vel_y = 0.0
+            vel_theta = 0.0
+            duration = 3.0
+            vel_topic = "/ropod/cmd_vel"
+    [state_descriptions.GO_LEFT]
+        state_module_name = "ropod_experiment_executor.commands.base_motion"
+        state_class_name = "BaseMotion"
+        [state_descriptions.GO_LEFT.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.GO_LEFT.arguments]
+            vel_x = 0.0
+            vel_y = 0.2
+            vel_theta = 0.0
+            duration = 3.0
+            vel_topic = "/ropod/cmd_vel"

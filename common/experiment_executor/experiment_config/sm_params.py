@@ -45,6 +45,7 @@ class SMFileKeys(object):
     STATE_MODULE_NAME = 'state_module_name'
     STATE_CLASS_NAME = 'state_class_name'
     REMOVE_STATE = 'remove'
+    INITIAL_STATE = 'initial_state'
 
     TRANSITIONS = 'transitions'
     TRANSITION = 'transition'
