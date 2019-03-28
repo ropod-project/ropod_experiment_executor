@@ -1,5 +1,5 @@
 from __future__ import print_function
-import oyaml as yaml
+import toml
 
 from experiment_executor.experiment_config.sm_params import (StateParams,
                                                              StateMachineParams,
@@ -29,10 +29,8 @@ class SMLoader(object):
         # we add any new arguments that are defined in the config
         # to the list of global state machine arguments
         if SMFileKeys.ARGS in sm_data:
-            for arg in sm_data[SMFileKeys.ARGS]:
-                arg_data = arg[SMFileKeys.ARG]
-                sm_params.global_params[arg_data[SMFileKeys.ARG_NAME]] = \
-                arg_data[SMFileKeys.ARG_VALUE]
+            for arg_name, arg_value in sm_data[SMFileKeys.ARGS].items():
+                sm_params.global_params[arg_name] = arg_value
 
         if SMFileKeys.ID in sm_data:
             sm_params.id = sm_data[SMFileKeys.ID]
@@ -53,36 +51,26 @@ class SMLoader(object):
                 if outcome not in sm_params.outcomes:
                     sm_params.outcomes.append(outcome)
 
-        # we add any states that are defined in the config
+        # we find the initial state and add it to the list of state machine states;
+        # important for the order in the state_params ordered dictionary
+        init_state_name = None
+        for state_name, state_data in sm_data[SMFileKeys.STATE_DESCRIPTIONS].items():
+            if SMFileKeys.INITIAL_STATE in state_data and state_data[SMFileKeys.INITIAL_STATE]:
+                init_state_name = state_name
+                sm_params.state_params[state_name] = SMLoader.__get_state_params(state_name,
+                                                                                 state_data,
+                                                                                 sm_params)
+                break
+
+        # we add any additional states that are defined in the config
         # to the list of state machine states
-        for state_description in sm_data[SMFileKeys.STATE_DESCRIPTIONS]:
-            state_data = state_description[SMFileKeys.STATE]
-
-            state_params = StateParams()
-            state_params.name = state_data[SMFileKeys.STATE_NAME]
-            state_params.state_module_name = state_data[SMFileKeys.STATE_MODULE_NAME]
-            state_params.state_class_name = state_data[SMFileKeys.STATE_CLASS_NAME]
-
-            for transition in state_data[SMFileKeys.TRANSITIONS]:
-                transition_data = transition[SMFileKeys.TRANSITION]
-                state_params.transitions[transition_data[SMFileKeys.TRANSITION_NAME]] = \
-                transition_data[SMFileKeys.RESULT_STATE]
-
-            if SMFileKeys.ARGS in state_data:
-                for arg in state_data[SMFileKeys.ARGS]:
-                    arg_data = arg[SMFileKeys.ARG]
-                    state_params.args[arg_data[SMFileKeys.ARG_NAME]] = \
-                    arg_data[SMFileKeys.ARG_VALUE]
-
-            for arg_name, arg_value in sm_params.global_params.items():
-                arg_data = arg[SMFileKeys.ARG]
-                state_params.args[arg_name] = arg_value
-
-            # we add the state machine ID and the state name as additional state arguments
-            state_params.args['sm_id'] = sm_params.id
-            state_params.args['state_name'] = state_params.name
-
-            sm_params.state_params[state_params.name] = state_params
+        for state_name, state_data in sm_data[SMFileKeys.STATE_DESCRIPTIONS].items():
+            # we don't want to add the initial state twice, so we skip it this time
+            if state_name == init_state_name:
+                continue
+            sm_params.state_params[state_name] = SMLoader.__get_state_params(state_name,
+                                                                             state_data,
+                                                                             sm_params)
         return sm_params
 
     @staticmethod
@@ -94,12 +82,36 @@ class SMLoader(object):
 
         '''
         file_handle = open(sm_file, 'r')
-        sm_data = yaml.load(file_handle)
+        sm_data = toml.load(file_handle)
         file_handle.close()
         return sm_data
 
     @staticmethod
-    def __print_sm_configuration(sm_params):
+    def __get_state_params(state_name, state_data, sm_params):
+        state_params = StateParams()
+        state_params.name = state_name
+        state_params.state_module_name = state_data[SMFileKeys.STATE_MODULE_NAME]
+        state_params.state_class_name = state_data[SMFileKeys.STATE_CLASS_NAME]
+
+        for transition_name, resulting_state in state_data[SMFileKeys.TRANSITIONS].items():
+            state_params.transitions[transition_name] = resulting_state
+
+        if SMFileKeys.ARGS in state_data:
+            for arg_name, arg_data in state_data[SMFileKeys.ARGS].items():
+                state_params.args[arg_name] = arg_data
+
+        for arg_name, arg_value in sm_params.global_params.items():
+            state_params.args[arg_name] = arg_value
+
+        # we add the state machine ID and the state name as additional state arguments
+        state_params.args['sm_id'] = sm_params.id
+        state_params.args['state_name'] = state_params.name
+
+        sm_params.state_params[state_params.name] = state_params
+        return state_params
+
+    @staticmethod
+    def print_sm_configuration(sm_params):
         '''Prints the state machine description parameters specified by 'sm_params'
 
         Keyword arguments:

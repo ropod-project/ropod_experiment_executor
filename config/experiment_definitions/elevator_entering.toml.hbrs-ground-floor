@@ -1,0 +1,19 @@
+sm_id = "elevator_entering"
+states = ["ENTER_ELEVATOR"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.ENTER_ELEVATOR]
+        state_module_name = "ropod_experiment_executor.commands.enter_elevator"
+        state_class_name = "EnterElevator"
+        [state_descriptions.ENTER_ELEVATOR.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.ENTER_ELEVATOR.arguments]
+            area_floor = 0
+            elevator_id = 121
+            elevator_door_id = 96
+            wait_for_elevator_action_topic = "/ropod_task_executor/WAIT_FOR_ELEVATOR"
+            enter_elevator_action_topic = "/ropod_task_executor/ENTER_ELEVATOR"
+            elevator_progress_topic = "/task_progress/elevator"
+            timeout_s = 120.0
