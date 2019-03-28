@@ -48,7 +48,9 @@ class UnDock(CommandBase):
         area_msg = Area()
         area_msg.id = self.area_id
         area_msg.name = self.area_name
+        area_msg.sub_areas.append(SubArea())
         action_msg.areas.append(area_msg)
+        action_msg.sub_areas.append(SubArea())
 
         print('[{0}] UnDocking in area {1}'.format(self.name, self.area_id))
         self.undock_action_pub.publish(action_msg)
