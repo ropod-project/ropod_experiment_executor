@@ -11,10 +11,10 @@ outcomes = ["DONE", "FAILED"]
             done = "DOCK"
             failed = "FAILED"
         [state_descriptions.GO_TO_DOCKING_STATION.arguments]
-            area_floor = -1
+            area_floor = 0
             go_to_action_topic = "/ropod_task_executor/GOTO"
             go_to_progress_topic = "/task_progress/goto"
-            timeout_s = 120.0
+            timeout_s = 1200.0
             [[state_descriptions.GO_TO_DOCKING_STATION.arguments.areas]]
                 area_id = "5"
                 area_name = "BRSU_C_L0_C9"
@@ -54,7 +54,7 @@ outcomes = ["DONE", "FAILED"]
             done = "UNDOCK"
             failed = "FAILED"
         [state_descriptions.GO_TO_UNDOCKING_STATION.arguments]
-            area_floor = -1
+            area_floor = 0
             go_to_action_topic = "/ropod_task_executor/GOTO"
             go_to_progress_topic = "/task_progress/goto"
             timeout_s = 120.0
@@ -70,6 +70,12 @@ outcomes = ["DONE", "FAILED"]
                 area_type = "junction"
                 subarea_id = "64"
                 subarea_name = "BRSU_C_L0_C8_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "92"
+                area_name = "BRSU_C_L0_C7"
+                area_type = "corridor"
+                subarea_id = "66"
+                subarea_name = "BRSU_C_L0_C7_LA1"
             [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
                 area_id = "8"
                 area_name = "BRSU_C_L0_C6"
@@ -205,7 +211,7 @@ outcomes = ["DONE", "FAILED"]
             done = "DONE"
             failed = "FAILED"
         [state_descriptions.GO_HOME.arguments]
-            area_floor = -1
+            area_floor = 0
             go_to_action_topic = "/ropod_task_executor/GOTO"
             go_to_progress_topic = "/task_progress/goto"
             timeout_s = 120.0
