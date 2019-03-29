@@ -1,0 +1,265 @@
+sm_id = "nav_dock_undock"
+states = ["GO_TO_DOCKING_STATION", "DOCK", "GO_TO_UNDOCKING_STATION", "UNDOCK", "GO_HOME"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.GO_TO_DOCKING_STATION]
+        state_module_name = "ropod_experiment_executor.commands.goto"
+        state_class_name = "GoTo"
+        initial_state = true
+        [state_descriptions.GO_TO_DOCKING_STATION.transitions]
+            done = "DOCK"
+            failed = "FAILED"
+        [state_descriptions.GO_TO_DOCKING_STATION.arguments]
+            area_floor = 0
+            go_to_action_topic = "/ropod_task_executor/GOTO"
+            go_to_progress_topic = "/task_progress/goto"
+            timeout_s = 1200.0
+            [[state_descriptions.GO_TO_DOCKING_STATION.arguments.areas]]
+                area_id = "5"
+                area_name = "BRSU_C_L0_C9"
+                area_type = "corridor"
+                subarea_id = "61"
+                subarea_name = "BRSU_C_L0_C9_LA1"
+            [[state_descriptions.GO_TO_DOCKING_STATION.arguments.areas]]
+                area_id = "7"
+                area_name = "BRSU_C_L0_C8"
+                area_type = "junction"
+                subarea_id = "64"
+                subarea_name = "BRSU_C_L0_C8_LA1"
+            [[state_descriptions.GO_TO_DOCKING_STATION.arguments.areas]]
+                area_id = "2"
+                area_name = "BRSU_C_L0_C11"
+                area_type = "corridor"
+                subarea_id = "57"
+                subarea_name = "BRSU_C_L0_C11_LA2"
+    [state_descriptions.DOCK]
+        state_module_name = "ropod_experiment_executor.commands.dock"
+        state_class_name = "Dock"
+        initial_state = true
+        [state_descriptions.DOCK.transitions]
+            done = "GO_TO_UNDOCKING_STATION"
+            failed = "FAILED"
+        [state_descriptions.DOCK.arguments]
+            area_id = "MobidikArea2"
+            area_name = "orient_wp_MobidikArea2"
+            dock_action_topic = "/ropod_task_executor/DOCK"
+            dock_progress_topic = "/task_progress/dock"
+            timeout_s = 120.0
+    [state_descriptions.GO_TO_UNDOCKING_STATION]
+        state_module_name = "ropod_experiment_executor.commands.goto"
+        state_class_name = "GoTo"
+        initial_state = true
+        [state_descriptions.GO_TO_UNDOCKING_STATION.transitions]
+            done = "UNDOCK"
+            failed = "FAILED"
+        [state_descriptions.GO_TO_UNDOCKING_STATION.arguments]
+            area_floor = 0
+            go_to_action_topic = "/ropod_task_executor/GOTO"
+            go_to_progress_topic = "/task_progress/goto"
+            timeout_s = 120.0
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "2"
+                area_name = "BRSU_C_L0_C11"
+                area_type = "corridor"
+                subarea_id = "56"
+                subarea_name = "BRSU_C_L0_C11_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "7"
+                area_name = "BRSU_C_L0_C8"
+                area_type = "junction"
+                subarea_id = "64"
+                subarea_name = "BRSU_C_L0_C8_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "92"
+                area_name = "BRSU_C_L0_C7"
+                area_type = "corridor"
+                subarea_id = "66"
+                subarea_name = "BRSU_C_L0_C7_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "8"
+                area_name = "BRSU_C_L0_C6"
+                area_type = "corridor"
+                subarea_id = "68"
+                subarea_name = "BRSU_C_L0_C6_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "9"
+                area_name = "BRSU_C_L0_C5"
+                area_type = "corridor"
+                subarea_id = "70"
+                subarea_name = "BRSU_C_L0_C5_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "10"
+                area_name = "BRSU_C_L0_C4"
+                area_type = "corridor"
+                subarea_id = "72"
+                subarea_name = "BRSU_C_L0_C4_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "12"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "junction"
+                subarea_id = "75"
+                subarea_name = "BRSU_C_L0_C2_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "11"
+                area_name = "BRSU_C_L0_C3"
+                area_type = "corridor"
+                subarea_id = "73"
+                subarea_name = "BRSU_C_L0_C3_LA2"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "80"
+                area_name = ""
+                area_type = "door"
+                subarea_id = ""
+                subarea_name = ""
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "116"
+                area_name = "BRSU_C_L0_A13"
+                area_type = "area"
+                subarea_id = "93"
+                subarea_name = "BRSU_C_L0_A13_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "94"
+                area_name = "BRSU_C_L0_A14"
+                area_type = "area"
+                subarea_id = "14"
+                subarea_name = "BRSU_C_L0_A14_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "97"
+                area_name = "BRSU_C_L0_A16"
+                area_type = "area"
+                subarea_id = "17"
+                subarea_name = "BRSU_C_L0_A16_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "99"
+                area_name = "BRSU_C_L0_A18"
+                area_type = "area"
+                subarea_id = "25"
+                subarea_name = "BRSU_C_L0_A18_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "100"
+                area_name = "BRSU_C_L0_A20"
+                area_type = "area"
+                subarea_id = "26"
+                subarea_name = "BRSU_C_L0_A20_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "81"
+                area_name = "BRSU_C_L0_A20"
+                area_type = "door"
+                subarea_id = ""
+                subarea_name = ""
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "101"
+                area_name = "BRSU_C_L0_C26"
+                area_type = "corridor"
+                subarea_id = "BRSU_C_L0_C26_LA2"
+                subarea_name = "27"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "103"
+                area_name = "BRSU_C_L0_C24"
+                area_type = "junction"
+                subarea_id = "29"
+                subarea_name = "BRSU_C_L0_C24_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "104"
+                area_name = "BRSU_C_L0_C23"
+                area_type = "corridor"
+                subarea_id = "32"
+                subarea_name = "BRSU_C_L0_C23_LA2"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "82"
+                area_name = ""
+                area_type = "door"
+                subarea_id = ""
+                subarea_name = ""
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "105"
+                area_name = "BRSU_C_L0_C22"
+                area_type = "corridor"
+                subarea_id = "35"
+                subarea_name = "BRSU_C_L0_C22_LA2"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "106"
+                area_name = "BRSU_C_L0_C21"
+                area_type = "corridor"
+                subarea_id = "36"
+                subarea_name = "BRSU_C_L0_C21_LA2"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "107"
+                area_name = "BRSU_C_L0_C20"
+                area_type = "corridor"
+                subarea_id = "39"
+                subarea_name = "BRSU_C_L0_C20_LA2"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "83"
+                area_name = ""
+                area_type = "door"
+                subarea_id = ""
+                subarea_name = ""
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "108"
+                area_name = "BRSU_C_L0_C19"
+                area_type = "corridor"
+                subarea_id = "40"
+                subarea_name = "BRSU_C_L0_C19_LA2"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "113"
+                area_name = "BRSU_C_L0_C15"
+                area_type = "junction"
+                subarea_id = "49"
+                subarea_name = "BRSU_C_L0_C15_LA1"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "112"
+                area_name = "BRSU_C_L0_C17"
+                area_type = "corridor"
+                subarea_id = "48"
+                subarea_name = "BRSU_C_L0_C17_LA2"
+            [[state_descriptions.GO_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "111"
+                area_name = "BRSU_C_L0_C18"
+                area_type = "corridor"
+                subarea_id = "45"
+                subarea_name = "BRSU_C_L0_C18_LA2"
+    [state_descriptions.UNDOCK]
+        state_module_name = "ropod_experiment_executor.commands.undock"
+        state_class_name = "UnDock"
+        initial_state = true
+        [state_descriptions.UNDOCK.transitions]
+            done = "GO_HOME"
+            failed = "FAILED"
+        [state_descriptions.UNDOCK.arguments]
+            area_id = "MobidikAreaC069"
+            area_name = "orient_wp_MobidikAreaC069"
+            dock_action_topic = "/ropod_task_executor/UNDOCK"
+            dock_progress_topic = "/task_progress/dock"
+            timeout_s = 120.0
+    [state_descriptions.GO_HOME]
+        state_module_name = "ropod_experiment_executor.commands.goto"
+        state_class_name = "GoTo"
+        initial_state = true
+        [state_descriptions.GO_HOME.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.GO_HOME.arguments]
+            area_floor = 0
+            go_to_action_topic = "/ropod_task_executor/GOTO"
+            go_to_progress_topic = "/task_progress/goto"
+            timeout_s = 120.0
+            [[state_descriptions.GO_HOME.arguments.areas]]
+                area_id = "2"
+                area_name = "BRSU_C_L0_C11"
+                area_type = "corridor"
+                subarea_id = "56"
+                subarea_name = "BRSU_C_L0_C11_LA1"
+            [[state_descriptions.GO_HOME.arguments.areas]]
+                area_id = "7"
+                area_name = "BRSU_C_L0_C8"
+                area_type = "junction"
+                subarea_id = "64"
+                subarea_name = "BRSU_C_L0_C8_LA1"
+            [[state_descriptions.GO_HOME.arguments.areas]]
+                area_id = "5"
+                area_name = "BRSU_C_L0_C9"
+                area_type = "corridor"
+                subarea_id = "60"
+                subarea_name = "BRSU_C_L0_C9_LA2"
