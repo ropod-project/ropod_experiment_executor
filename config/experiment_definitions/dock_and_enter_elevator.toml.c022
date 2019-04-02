@@ -1,0 +1,32 @@
+sm_id = "dock_and_enter_elevator"
+states = ["DOCK", "ENTER_ELEVATOR"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.DOCK]
+        state_module_name = "ropod_experiment_executor.commands.dock"
+        state_class_name = "Dock"
+        initial_state = true
+        [state_descriptions.DOCK.transitions]
+            done = "ENTER_ELEVATOR"
+            failed = "FAILED"
+        [state_descriptions.DOCK.arguments]
+            area_id = "MobidikArea1"
+            area_name = "orient_wp_MobidikArea1"
+            dock_action_topic = "/ropod_task_executor/DOCK"
+            dock_progress_topic = "/task_progress/dock"
+            timeout_s = 120.0
+    [state_descriptions.ENTER_ELEVATOR]
+        state_module_name = "ropod_experiment_executor.commands.enter_elevator"
+        state_class_name = "EnterElevator"
+        [state_descriptions.ENTER_ELEVATOR.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.ENTER_ELEVATOR.arguments]
+            area_floor = 0
+            elevator_id = 4
+            elevator_door_id = 88
+            wait_for_elevator_action_topic = "/ropod_task_executor/WAIT_FOR_ELEVATOR"
+            enter_elevator_action_topic = "/ropod_task_executor/ENTER_ELEVATOR"
+            elevator_progress_topic = "/task_progress/elevator"
+            timeout_s = 120.0
