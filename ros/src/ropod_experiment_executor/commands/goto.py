@@ -16,9 +16,9 @@ class GoTo(CommandBase):
 
     '''
     def __init__(self, name, **kwargs):
-        super(GoTo, self).__init__(name, outcomes=['done', 'failed'])
+        super(GoTo, self).__init__(name, outcomes=['done', 'failed'],
+                input_keys=['areas'])
 
-        self.areas = kwargs.get('areas', list())
         self.area_floor = kwargs.get('area_floor', 0)
         self.go_to_action_topic = kwargs.get('go_to_action_topic', '/ropod_task_executor/GOTO')
         self.go_to_progress_topic = kwargs.get('go_to_progress_topic', '/task_progress/goto')
@@ -38,7 +38,7 @@ class GoTo(CommandBase):
         rospy.sleep(1.)
 
     def execute(self, userdata):
-        '''Sends a navigation goal for each area in self.areas.
+        '''Sends a navigation goal for each area in userdata.areas.
         '''
         self.area_list = []
         self.current_area_idx = 0
@@ -52,7 +52,7 @@ class GoTo(CommandBase):
         action_msg.start_floor = self.area_floor
         action_msg.goal_floor = self.area_floor
 
-        for area_data in self.areas:
+        for area_data in userdata.areas:
             area = area_data['area_name'].encode('ascii')
             self.area_list.append(area)
 
@@ -70,7 +70,7 @@ class GoTo(CommandBase):
             area_msg.sub_areas.append(subarea_msg)
             action_msg.areas.append(area_msg)
 
-        self.number_of_waypoints = len(self.areas)
+        self.number_of_waypoints = len(userdata.areas)
 
         print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
         self.go_to_action_pub.publish(action_msg)
@@ -83,6 +83,7 @@ class GoTo(CommandBase):
             elapsed = time.time() - start_time
             rospy.sleep(0.05)
 
+        print(self.action_completed)
         feedback_msg.stamp = rospy.Time.now()
         feedback_msg.state = CommandFeedback.FINISHED
         self.send_feedback(feedback_msg)
