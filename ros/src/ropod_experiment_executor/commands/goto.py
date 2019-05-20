@@ -83,12 +83,18 @@ class GoTo(CommandBase):
             elapsed = time.time() - start_time
             rospy.sleep(0.05)
 
-        print(self.action_completed)
-        feedback_msg.stamp = rospy.Time.now()
-        feedback_msg.state = CommandFeedback.FINISHED
-        self.send_feedback(feedback_msg)
-        self.send_state(StateInfo.SUCCESS)
-        return 'done'
+        if self.action_completed:
+            feedback_msg.stamp = rospy.Time.now()
+            feedback_msg.state = CommandFeedback.FINISHED
+            self.send_feedback(feedback_msg)
+            self.send_state(StateInfo.SUCCESS)
+            return 'done'
+        else: # timeout occurred
+            feedback_msg.stamp = rospy.Time.now()
+            feedback_msg.state = CommandFeedback.FAILED
+            self.send_feedback(feedback_msg)
+            self.send_state(StateInfo.ERROR)
+            return 'failed'
 
     def action_progress_cb(self, progress_msg):
         '''Processes a navigation action progress message and modifies the value of
