@@ -100,11 +100,9 @@ class GoTo(CommandBase):
         '''Processes a navigation action progress message and modifies the value of
         self.action_completed depending on the message status code.
         '''
-        if progress_msg.status.status_code == Status.REACHED and progress_msg.sequenceNumber > 0:
+        if progress_msg.status.status_code == Status.GOAL_REACHED and progress_msg.sequenceNumber > 0:
             self.waypoint_counter += 1
+            print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
+            self.current_area_idx += 1
             if self.waypoint_counter == self.number_of_waypoints:
                 self.action_completed = True
-        elif progress_msg.status.status_code == Status.ONGOING:
-            self.current_area_idx += 1
-            print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
-            self.send_state(StateInfo.SUCCESS)
