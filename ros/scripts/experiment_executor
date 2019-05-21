@@ -38,7 +38,7 @@ class ExperimentExecutorInterface(object):
 
         self.experiment_feedback_msg.stamp = rospy.Time.now()
         self.experiment_feedback_msg.experiment_type = msg.experiment_type
-        if result is not None and result == 'done' :
+        if result is not None and result == 'DONE' :
             self.experiment_feedback_msg.result = ExperimentFeedback.FINISHED
         else:
             self.experiment_feedback_msg.result = ExperimentFeedback.FAILED

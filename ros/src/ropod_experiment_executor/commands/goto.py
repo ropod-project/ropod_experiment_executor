@@ -47,6 +47,10 @@ class GoTo(CommandBase):
         feedback_msg.command_name = self.name
         feedback_msg.state = CommandFeedback.ONGOING
 
+        if not userdata.areas or userdata.areas == []:
+            self.cleanup(CommandFeedback.FINISHED, StateInfo.SUCCESS)
+            return 'done'
+
         action_msg = Action()
         action_msg.type = 'GOTO'
         action_msg.start_floor = self.area_floor
@@ -84,16 +88,10 @@ class GoTo(CommandBase):
             rospy.sleep(0.05)
 
         if self.action_completed:
-            feedback_msg.stamp = rospy.Time.now()
-            feedback_msg.state = CommandFeedback.FINISHED
-            self.send_feedback(feedback_msg)
-            self.send_state(StateInfo.SUCCESS)
+            self.cleanup(CommandFeedback.FINISHED, StateInfo.SUCCESS)
             return 'done'
         else: # timeout occurred
-            feedback_msg.stamp = rospy.Time.now()
-            feedback_msg.state = CommandFeedback.FAILED
-            self.send_feedback(feedback_msg)
-            self.send_state(StateInfo.ERROR)
+            self.cleanup(CommandFeedback.FAILED, StateInfo.ERROR)
             return 'failed'
 
     def action_progress_cb(self, progress_msg):
@@ -106,3 +104,20 @@ class GoTo(CommandBase):
             self.current_area_idx += 1
             if self.waypoint_counter == self.number_of_waypoints:
                 self.action_completed = True
+
+    def cleanup(self, last_feedback, state):
+        '''Does the following cleanup 
+            - send the last feedback message
+            - send the state status
+            - unregister sub and pub
+
+        :last_feedback: int
+        :state: int
+        '''
+        feedback_msg = CommandFeedback()
+        feedback_msg.command_name = self.name
+        feedback_msg.stamp = rospy.Time.now()
+        feedback_msg.state = last_feedback
+        self.send_feedback(feedback_msg)
+        self.send_state(state)
+        self.go_to_progress_sub.unregister()
