@@ -74,7 +74,6 @@ outcomes = ["DONE", "FAILED"]
             done = "DONE"
             failed = "FAILED"
         [state_descriptions.GO_TO.arguments]
-            area_floor = -1
             go_to_action_topic = "/ropod_task_executor/GOTO"
             go_to_progress_topic = "/task_progress/goto"
             timeout_s = 120.0
