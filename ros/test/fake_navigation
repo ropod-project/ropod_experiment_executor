@@ -19,8 +19,10 @@ class FakeNavigation():
                            self.goto_action_executor_cb)
 
     def goto_action_executor_cb(self, msg):
+        if msg.type != "GOTO":
+            return
         num_of_areas = len(msg.areas)
-        print(num_of_areas)
+        rospy.loginfo("Received GOTO action with %i areas", num_of_areas)
         for i in range(num_of_areas):
             progress = TaskProgressGOTO(status=Status(status_code=Status.GOAL_REACHED),
                     sequenceNumber=i+1)
@@ -30,4 +32,5 @@ class FakeNavigation():
 if __name__ == "__main__":
     rospy.init_node('experiment_executor_fake_navigation') 
     FAKE_NAVIGATION = FakeNavigation()
+    rospy.loginfo("Started fake navigation node. Listening to GOTO action msg.")
     rospy.spin()
