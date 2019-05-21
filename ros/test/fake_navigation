@@ -24,6 +24,7 @@ class FakeNavigation():
         num_of_areas = len(msg.areas)
         rospy.loginfo("Received GOTO action with %i areas", num_of_areas)
         for i in range(num_of_areas):
+            print('[{0}] Going to {1} {2}'.format("fake_navigation", msg.areas[i].name, msg.areas[i].id))
             progress = TaskProgressGOTO(status=Status(status_code=Status.GOAL_REACHED),
                     sequenceNumber=i+1)
             self.prog_pub.publish(progress)
