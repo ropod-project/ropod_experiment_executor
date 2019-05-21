@@ -84,7 +84,6 @@ class GetPathPlan(CommandBase):
                 area_dict['subarea_id'] = area.sub_areas[0].id if len(area.sub_areas) > 0 else ""
                 area_dict['subarea_name'] = area.sub_areas[0].name if len(area.sub_areas) > 0 else ""
                 areas.append(area_dict)
-            print(areas)
             userdata.areas = areas
             userdata.area_floor = self.source['floor']
         else:
@@ -93,7 +92,6 @@ class GetPathPlan(CommandBase):
 
         feedback_msg = CommandFeedback()
         feedback_msg.command_name = self.name
-        feedback_msg.state = CommandFeedback.ONGOING
         feedback_msg.stamp = rospy.Time.now()
         feedback_msg.state = CommandFeedback.FINISHED
         self.send_feedback(feedback_msg)
