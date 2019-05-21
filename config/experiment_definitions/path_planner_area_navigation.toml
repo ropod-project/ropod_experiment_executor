@@ -12,21 +12,22 @@ outcomes = ["DONE", "FAILED"]
             failed = "FAILED"
         [state_descriptions.GET_PATH_PLAN.arguments]
             use_planner = true
-            area_floor = -1
             plan_path_action_topic = "something"
             timeout_s = 20.0
             [state_descriptions.GET_PATH_PLAN.arguments.source]
-                area_id = "3130"
-                area_name = "AMK_B_L-1_C13"
+                floor = -1
+                area_id = ""
+                area_name = "AMK_D_L-1_C41"
                 area_type = "corridor"
-                subarea_id = "4848"
-                subarea_name = "AMK_B_L-1_C13_LA2"
+                subarea_id = ""
+                subarea_name = "AMK_D_L-1_C41_LA1"
             [state_descriptions.GET_PATH_PLAN.arguments.destination]
-                area_id = "3131"
-                area_name = "AMK_B_L-1_C14"
+                floor = -1
+                area_id = "3142"
+                area_name = "AMK_B_L-1_C2"
                 area_type = "corridor"
-                subarea_id = "4847"
-                subarea_name = "AMK_B_L-1_C14_LA1"
+                subarea_id = "4883"
+                subarea_name = "AMK_B_L-1_C2_LA1"
     [state_descriptions.GO_TO]
         state_module_name = "ropod_experiment_executor.commands.goto"
         state_class_name = "GoTo"

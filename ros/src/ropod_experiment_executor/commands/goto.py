@@ -17,9 +17,8 @@ class GoTo(CommandBase):
     '''
     def __init__(self, name, **kwargs):
         super(GoTo, self).__init__(name, outcomes=['done', 'failed'],
-                input_keys=['areas'])
+                input_keys=['areas', 'area_floor'])
 
-        self.area_floor = kwargs.get('area_floor', 0)
         self.go_to_action_topic = kwargs.get('go_to_action_topic', '/ropod_task_executor/GOTO')
         self.go_to_progress_topic = kwargs.get('go_to_progress_topic', '/task_progress/goto')
         self.timeout_s = kwargs.get('timeout_s', 120.)
@@ -47,14 +46,14 @@ class GoTo(CommandBase):
         feedback_msg.command_name = self.name
         feedback_msg.state = CommandFeedback.ONGOING
 
-        if not userdata.areas or userdata.areas == []:
+        if not userdata.areas or userdata.areas == [] or not userdata.area_floor:
             self.cleanup(CommandFeedback.FINISHED, StateInfo.SUCCESS)
             return 'done'
 
         action_msg = Action()
         action_msg.type = 'GOTO'
-        action_msg.start_floor = self.area_floor
-        action_msg.goal_floor = self.area_floor
+        action_msg.start_floor = userdata.area_floor
+        action_msg.goal_floor = userdata.area_floor
 
         for area_data in userdata.areas:
             area = area_data['area_name'].encode('ascii')
@@ -64,12 +63,12 @@ class GoTo(CommandBase):
             area_msg.id = area_data['area_id'].encode('ascii')
             area_msg.name = area_data['area_name'].encode('ascii')
             area_msg.type = area_data['area_type'].encode('ascii')
-            area_msg.floor_number = self.area_floor
+            area_msg.floor_number = userdata.area_floor
 
             subarea_msg = SubArea()
             subarea_msg.id = area_data['subarea_id'].encode('ascii')
             subarea_msg.name = area_data['subarea_name'].encode('ascii')
-            subarea_msg.floor_number = self.area_floor
+            subarea_msg.floor_number = userdata.area_floor
 
             area_msg.sub_areas.append(subarea_msg)
             action_msg.areas.append(area_msg)
