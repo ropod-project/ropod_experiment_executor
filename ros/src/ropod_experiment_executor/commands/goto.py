@@ -17,7 +17,7 @@ class GoTo(CommandBase):
     '''
     def __init__(self, name, **kwargs):
         super(GoTo, self).__init__(name, outcomes=['done', 'failed'],
-                input_keys=['areas', 'area_floor'])
+                                   input_keys=['areas', 'area_floor'])
 
         self.go_to_action_topic = kwargs.get('go_to_action_topic', '/ropod_task_executor/GOTO')
         self.go_to_progress_topic = kwargs.get('go_to_progress_topic', '/task_progress/goto')
@@ -86,18 +86,18 @@ class GoTo(CommandBase):
             elapsed = time.time() - start_time
             rospy.sleep(0.05)
 
-        if self.action_completed:
-            self.cleanup(CommandFeedback.FINISHED, StateInfo.SUCCESS)
-            return 'done'
-        else: # timeout occurred
+        if not self.action_completed: # timeout occurred
             self.cleanup(CommandFeedback.FAILED, StateInfo.ERROR)
             return 'failed'
+        self.cleanup(CommandFeedback.FINISHED, StateInfo.SUCCESS)
+        return 'done'
 
     def action_progress_cb(self, progress_msg):
         '''Processes a navigation action progress message and modifies the value of
         self.action_completed depending on the message status code.
         '''
-        if progress_msg.status.status_code == Status.GOAL_REACHED and progress_msg.sequenceNumber > 0:
+        if progress_msg.status.status_code == Status.GOAL_REACHED and \
+                progress_msg.sequenceNumber > 0:
             self.waypoint_counter += 1
             print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
             self.current_area_idx += 1
@@ -105,7 +105,7 @@ class GoTo(CommandBase):
                 self.action_completed = True
 
     def cleanup(self, last_feedback, state):
-        '''Does the following cleanup 
+        '''Does the following cleanup
             - send the last feedback message
             - send the state status
             - unregister sub and pub
