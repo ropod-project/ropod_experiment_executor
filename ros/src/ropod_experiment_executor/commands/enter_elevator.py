@@ -70,6 +70,7 @@ class EnterElevator(CommandBase):
         if not self.action_completed:
             self.__report_failure(feedback_msg,
                                   '[{0}] Elevator did not arrive within the alloted time; giving up'.format(self.name))
+            self.elevator_progress_sub.unregister()
             return 'failed'
 
         # if the WAIT_FOR_ELEVATOR action ends in success, we proceed
@@ -91,12 +92,14 @@ class EnterElevator(CommandBase):
         if not self.action_completed:
             self.__report_failure(feedback_msg,
                               '[{0}] Could not enter elevator; giving up'.format(self.name))
+            self.elevator_progress_sub.unregister()
             return 'failed'
 
         feedback_msg.stamp = rospy.Time.now()
         feedback_msg.state = CommandFeedback.FINISHED
         self.send_feedback(feedback_msg)
         self.send_state(StateInfo.SUCCESS)
+        self.elevator_progress_sub.unregister()
         return 'done'
 
     def action_progress_cb(self, progress_msg):

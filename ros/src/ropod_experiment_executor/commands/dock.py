@@ -69,6 +69,7 @@ class Dock(CommandBase):
         feedback_msg.state = CommandFeedback.FINISHED
         self.send_feedback(feedback_msg)
         self.send_state(StateInfo.SUCCESS)
+        self.dock_progress_sub.unregister()
         return 'done'
 
     def action_progress_cb(self, progress_msg):
