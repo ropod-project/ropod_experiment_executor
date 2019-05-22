@@ -63,11 +63,10 @@ class UnDock(CommandBase):
             elapsed = time.time() - start_time
             rospy.sleep(0.05)
 
-        feedback_msg.stamp = rospy.Time.now()
-        feedback_msg.state = CommandFeedback.FINISHED
-        self.send_feedback(feedback_msg)
-        self.send_state(StateInfo.SUCCESS)
-        self.undock_progress_sub.unregister()
+        if not self.action_completed: # timeout occurred
+            self.cleanup(CommandFeedback.FAILED, StateInfo.ERROR)
+            return 'failed'
+        self.cleanup(CommandFeedback.FINISHED, StateInfo.SUCCESS)
         return 'done'
 
     def action_progress_cb(self, progress_msg):
@@ -76,3 +75,20 @@ class UnDock(CommandBase):
         '''
         if progress_msg.status.status_code == Status.UNDOCKED:
             self.action_completed = True
+
+    def cleanup(self, last_feedback, state):
+        '''Does the following cleanup
+            - send the last feedback message
+            - send the state status
+            - unregister sub
+
+        :last_feedback: int
+        :state: int
+        '''
+        feedback_msg = CommandFeedback()
+        feedback_msg.command_name = self.name
+        feedback_msg.stamp = rospy.Time.now()
+        feedback_msg.state = last_feedback
+        self.send_feedback(feedback_msg)
+        self.send_state(state)
+        self.undock_progress_sub.unregister()
