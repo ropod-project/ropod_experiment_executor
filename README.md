@@ -25,6 +25,7 @@ pip3 install toml
 ```
 Install instructions for other repositories are available in their READMEs.
 
+<!--
 ## Usage
 
 1. `roscore`
@@ -39,3 +40,4 @@ Install instructions for other repositories are available in their READMEs.
 
 If testing navigation test without a real ropod, execute `rosrun
 ropod_experiment_executor fake_navigation`
+-->
