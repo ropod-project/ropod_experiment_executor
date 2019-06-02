@@ -1,0 +1,46 @@
+#! /usr/bin/env python
+"""
+This module acts as navigation module for experiment executor goto action.
+"""
+
+from __future__ import print_function
+import rospy
+
+from ropod_ros_msgs.msg import Action, TaskProgressGOTO, Status
+
+class FakeNavigation():
+
+    """This class creates subscriber and publisher like the actual navigation module
+    to mimic and test experiment executor without a robot."""
+
+    def __init__(self):
+        self.prog_pub = rospy.Publisher('/task_progress/goto', 
+                                                TaskProgressGOTO,
+                                                queue_size=5)
+        rospy.Subscriber('/ropod_task_executor/GOTO',
+                           Action,
+                           self.goto_action_executor_cb)
+
+    def goto_action_executor_cb(self, msg):
+        """Callback method for action topic of experiment executor.
+        It publishes progress messages for the goto action based on the number
+        of areas in the request.
+        """
+        if msg.type != "GOTO":
+            return
+        num_of_areas = len(msg.areas)
+        rospy.loginfo("Received GOTO action with %i areas", num_of_areas)
+        for i in range(num_of_areas):
+            print('[{0}] Going to {1} {2}'.format("fake_navigation",
+                                                  msg.areas[i].name,
+                                                  msg.areas[i].id))
+            progress = TaskProgressGOTO(status=Status(status_code=Status.GOAL_REACHED),
+                                        sequenceNumber=i+1)
+            self.prog_pub.publish(progress)
+            rospy.sleep(0.5)
+
+if __name__ == "__main__":
+    rospy.init_node('experiment_executor_fake_navigation')
+    FAKE_NAVIGATION = FakeNavigation()
+    rospy.loginfo("Started fake navigation node. Listening to GOTO action msg.")
+    rospy.spin()

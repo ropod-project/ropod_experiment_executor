@@ -26,9 +26,14 @@ class ExperimentExecutorInterface(object):
         self.experiment_feedback_msg = ExperimentFeedback()
 
     def execute_experiment(self, msg):
+        '''
+        :msg: ExecuteExperiment
+        :returns: None
+        '''
         sm_config_file = os.path.join(self.experiment_config_path, msg.experiment_type + '.toml')
         if not os.path.isfile(sm_config_file):
-            print('[experiment_executor] Received an unknown experiment request: {0}'.format(msg.experiment_type))
+            print('[experiment_executor] Received an unknown experiment request:',
+                  ' {0}'.format(msg.experiment_type))
             print('[experiment_executor] Ignoring request')
             return
 
@@ -38,7 +43,7 @@ class ExperimentExecutorInterface(object):
 
         self.experiment_feedback_msg.stamp = rospy.Time.now()
         self.experiment_feedback_msg.experiment_type = msg.experiment_type
-        if result:
+        if result and result == 'DONE':
             self.experiment_feedback_msg.result = ExperimentFeedback.FINISHED
         else:
             self.experiment_feedback_msg.result = ExperimentFeedback.FAILED
@@ -46,5 +51,5 @@ class ExperimentExecutorInterface(object):
 
 if __name__ == '__main__':
     rospy.init_node('experiment_executor')
-    executor_interface = ExperimentExecutorInterface()
+    EXECUTOR_INTERFACE = ExperimentExecutorInterface()
     rospy.spin()

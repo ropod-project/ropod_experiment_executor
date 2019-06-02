@@ -16,10 +16,9 @@ class GoTo(CommandBase):
 
     '''
     def __init__(self, name, **kwargs):
-        super(GoTo, self).__init__(name, outcomes=['done', 'failed'])
+        super(GoTo, self).__init__(name, outcomes=['done', 'failed'],
+                                   input_keys=['areas', 'area_floor'])
 
-        self.areas = kwargs.get('areas', list())
-        self.area_floor = kwargs.get('area_floor', 0)
         self.go_to_action_topic = kwargs.get('go_to_action_topic', '/ropod_task_executor/GOTO')
         self.go_to_progress_topic = kwargs.get('go_to_progress_topic', '/task_progress/goto')
         self.timeout_s = kwargs.get('timeout_s', 120.)
@@ -38,7 +37,7 @@ class GoTo(CommandBase):
         rospy.sleep(1.)
 
     def execute(self, userdata):
-        '''Sends a navigation goal for each area in self.areas.
+        '''Sends a navigation goal for each area in userdata.areas.
         '''
         self.area_list = []
         self.current_area_idx = 0
@@ -47,12 +46,16 @@ class GoTo(CommandBase):
         feedback_msg.command_name = self.name
         feedback_msg.state = CommandFeedback.ONGOING
 
+        if not userdata.areas or userdata.areas == [] or not userdata.area_floor:
+            self.cleanup(CommandFeedback.FINISHED, StateInfo.SUCCESS)
+            return 'done'
+
         action_msg = Action()
         action_msg.type = 'GOTO'
-        action_msg.start_floor = self.area_floor
-        action_msg.goal_floor = self.area_floor
+        action_msg.start_floor = userdata.area_floor
+        action_msg.goal_floor = userdata.area_floor
 
-        for area_data in self.areas:
+        for area_data in userdata.areas:
             area = area_data['area_name'].encode('ascii')
             self.area_list.append(area)
 
@@ -60,17 +63,17 @@ class GoTo(CommandBase):
             area_msg.id = area_data['area_id'].encode('ascii')
             area_msg.name = area_data['area_name'].encode('ascii')
             area_msg.type = area_data['area_type'].encode('ascii')
-            area_msg.floor_number = self.area_floor
+            area_msg.floor_number = userdata.area_floor
 
             subarea_msg = SubArea()
             subarea_msg.id = area_data['subarea_id'].encode('ascii')
             subarea_msg.name = area_data['subarea_name'].encode('ascii')
-            subarea_msg.floor_number = self.area_floor
+            subarea_msg.floor_number = userdata.area_floor
 
             area_msg.sub_areas.append(subarea_msg)
             action_msg.areas.append(area_msg)
 
-        self.number_of_waypoints = len(self.areas)
+        self.number_of_waypoints = len(userdata.areas)
 
         print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
         self.go_to_action_pub.publish(action_msg)
@@ -83,21 +86,37 @@ class GoTo(CommandBase):
             elapsed = time.time() - start_time
             rospy.sleep(0.05)
 
-        feedback_msg.stamp = rospy.Time.now()
-        feedback_msg.state = CommandFeedback.FINISHED
-        self.send_feedback(feedback_msg)
-        self.send_state(StateInfo.SUCCESS)
+        if not self.action_completed: # timeout occurred
+            self.cleanup(CommandFeedback.FAILED, StateInfo.ERROR)
+            return 'failed'
+        self.cleanup(CommandFeedback.FINISHED, StateInfo.SUCCESS)
         return 'done'
 
     def action_progress_cb(self, progress_msg):
         '''Processes a navigation action progress message and modifies the value of
         self.action_completed depending on the message status code.
         '''
-        if progress_msg.status.status_code == Status.REACHED and progress_msg.sequenceNumber > 0:
+        if progress_msg.status.status_code == Status.GOAL_REACHED and \
+                progress_msg.sequenceNumber > 0:
             self.waypoint_counter += 1
+            print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
+            self.current_area_idx += 1
             if self.waypoint_counter == self.number_of_waypoints:
                 self.action_completed = True
-        elif progress_msg.status.status_code == Status.ONGOING:
-            self.current_area_idx += 1
-            print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
-            self.send_state(StateInfo.SUCCESS)
+
+    def cleanup(self, last_feedback, state):
+        '''Does the following cleanup
+            - send the last feedback message
+            - send the state status
+            - unregister sub and pub
+
+        :last_feedback: int
+        :state: int
+        '''
+        feedback_msg = CommandFeedback()
+        feedback_msg.command_name = self.name
+        feedback_msg.stamp = rospy.Time.now()
+        feedback_msg.state = last_feedback
+        self.send_feedback(feedback_msg)
+        self.send_state(state)
+        self.go_to_progress_sub.unregister()

@@ -1,0 +1,40 @@
+sm_id = "plan_path_area_navigation"
+states = ["GET_PATH_PLAN", "GO_TO"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.GET_PATH_PLAN]
+        state_module_name = "ropod_experiment_executor.commands.get_path_plan"
+        state_class_name = "GetPathPlan"
+        initial_state = true
+        [state_descriptions.GET_PATH_PLAN.transitions]
+            done = "GO_TO"
+            failed = "FAILED"
+        [state_descriptions.GET_PATH_PLAN.arguments]
+            use_planner = true
+            plan_path_action_topic = "/get_path_plan"
+            timeout_s = 20.0
+            [state_descriptions.GET_PATH_PLAN.arguments.source]
+                floor = -1
+                area_id = ""
+                area_name = "AMK_D_L-1_C41"
+                area_type = "corridor"
+                subarea_id = ""
+                subarea_name = "AMK_D_L-1_C41_LA1"
+            [state_descriptions.GET_PATH_PLAN.arguments.destination]
+                floor = -1
+                area_id = "3142"
+                area_name = "AMK_B_L-1_C2"
+                area_type = "corridor"
+                subarea_id = "4883"
+                subarea_name = "AMK_B_L-1_C2_LA1"
+    [state_descriptions.GO_TO]
+        state_module_name = "ropod_experiment_executor.commands.goto"
+        state_class_name = "GoTo"
+        [state_descriptions.GO_TO.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.GO_TO.arguments]
+            go_to_action_topic = "/ropod_task_executor/GOTO"
+            go_to_progress_topic = "/task_progress/goto"
+            timeout_s = 120.0

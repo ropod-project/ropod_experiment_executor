@@ -1,71 +1,79 @@
 sm_id = "area_navigation"
-states = ["GO_TO"]
+states = ["GET_PATH_PLAN", "GO_TO"]
 outcomes = ["DONE", "FAILED"]
 
 [state_descriptions]
-    [state_descriptions.GO_TO]
-        state_module_name = "ropod_experiment_executor.commands.goto"
-        state_class_name = "GoTo"
+    [state_descriptions.GET_PATH_PLAN]
+        state_module_name = "ropod_experiment_executor.commands.get_path_plan"
+        state_class_name = "GetPathPlan"
         initial_state = true
-        [state_descriptions.GO_TO.transitions]
-            done = "DONE"
+        [state_descriptions.GET_PATH_PLAN.transitions]
+            done = "GO_TO"
             failed = "FAILED"
-        [state_descriptions.GO_TO.arguments]
+        [state_descriptions.GET_PATH_PLAN.arguments]
+            use_planner = false
             area_floor = -1
-            go_to_action_topic = "/ropod_task_executor/GOTO"
-            go_to_progress_topic = "/task_progress/goto"
-            timeout_s = 120.0
-            [[state_descriptions.GO_TO.arguments.areas]]
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "3130"
                 area_name = "AMK_B_L-1_C13"
                 area_type = "corridor"
                 subarea_id = "4848"
                 subarea_name = "AMK_B_L-1_C13_LA2"
-            [[state_descriptions.GO_TO.arguments.areas]]
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "3131"
                 area_name = "AMK_B_L-1_C14"
                 area_type = "corridor"
                 subarea_id = "4847"
                 subarea_name = "AMK_B_L-1_C14_LA1"
-            [[state_descriptions.GO_TO.arguments.areas]]
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "3133"
                 area_name = "AMK_B_L-1_C15"
                 area_type = "junction"
                 subarea_id = "4870"
                 subarea_name = "AMK_B_L-1_C15_LA1"
-            [[state_descriptions.GO_TO.arguments.areas]]
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "3134"
                 area_name = "AMK_B_L-1_C16"
                 area_type = "corridor"
                 subarea_id = "4867"
                 subarea_name = "AMK_B_L-1_C16_LA1"
-            [[state_descriptions.GO_TO.arguments.areas]]
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "3135"
                 area_name = "AMK_B_L-1_C17"
                 area_type = "junction"
                 subarea_id = "4872"
                 subarea_name = "AMK_B_L-1_C17_LA1"
-            [[state_descriptions.GO_TO.arguments.areas]]
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "3138"
                 area_name = "AMK_B_L-1_C5"
                 area_type = "junction"
                 subarea_id = "4881"
                 subarea_name = "AMK_B_L-1_C5_LA1"
-            [[state_descriptions.GO_TO.arguments.areas]]
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "3139"
                 area_name = "AMK_B_L-1_C4"
                 area_type = "corridor"
                 subarea_id = "4880"
                 subarea_name = "AMK_B_L-1_C4_LA1"
-            [[state_descriptions.GO_TO.arguments.areas]]
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "3140"
                 area_name = "AMK_B_L-1_C3"
                 area_type = "corridor"
                 subarea_id = "4884"
                 subarea_name = "AMK_B_L-1_C3_LA1"
-            [[state_descriptions.GO_TO.arguments.areas]]
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "3142"
                 area_name = "AMK_B_L-1_C2"
                 area_type = "corridor"
                 subarea_id = "4883"
                 subarea_name = "AMK_B_L-1_C2_LA1"
+    [state_descriptions.GO_TO]
+        state_module_name = "ropod_experiment_executor.commands.goto"
+        state_class_name = "GoTo"
+        [state_descriptions.GO_TO.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.GO_TO.arguments]
+            go_to_action_topic = "/ropod_task_executor/GOTO"
+            go_to_progress_topic = "/task_progress/goto"
+            timeout_s = 120.0
