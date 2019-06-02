@@ -108,7 +108,7 @@ class GoTo(CommandBase):
         '''Does the following cleanup
             - send the last feedback message
             - send the state status
-            - unregister sub and pub
+            - unregister sub
 
         :last_feedback: int
         :state: int
