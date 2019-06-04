@@ -106,7 +106,7 @@ class EnterElevator(CommandBase):
         '''Processes an elevator action progress message and modifies the value of
         self.action_completed depending on the message status code.
         '''
-        if progress_msg.status.status_code == Status.REACHED:
+        if progress_msg.status.status_code == Status.GOAL_REACHED:
             self.action_completed = True
 
     def __wait_for_action(self, feedback_msg):
