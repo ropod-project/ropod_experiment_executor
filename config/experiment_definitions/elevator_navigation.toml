@@ -37,6 +37,7 @@ outcomes = ["DONE", "FAILED"]
             failed = "FAILED"
         [state_descriptions.EXIT_ELEVATOR.arguments]
             outside_area_id = 0
+            outside_area_name = 'outside_elevator'
             exit_elevator_action_topic = "/ropod_task_executor/EXIT_ELEVATOR"
             elevator_progress_topic = "/task_progress/elevator"
             timeout_s = 120.0
