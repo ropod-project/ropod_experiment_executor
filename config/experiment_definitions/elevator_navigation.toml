@@ -1,0 +1,42 @@
+sm_id = "elevator_navigation"
+states = ["ENTER_ELEVATOR", "RIDE_ELEVATOR", "EXIT_ELEVATOR"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.ENTER_ELEVATOR]
+        state_module_name = "ropod_experiment_executor.commands.enter_elevator"
+        state_class_name = "EnterElevator"
+        initial_state = true
+        [state_descriptions.ENTER_ELEVATOR.transitions]
+            done = "RIDE_ELEVATOR"
+            failed = "FAILED"
+        [state_descriptions.ENTER_ELEVATOR.arguments]
+            area_floor = 0
+            elevator_id = 121
+            elevator_door_id = 96
+            wait_for_elevator_action_topic = "/ropod_task_executor/WAIT_FOR_ELEVATOR"
+            enter_elevator_action_topic = "/ropod_task_executor/ENTER_ELEVATOR"
+            elevator_progress_topic = "/task_progress/elevator"
+            timeout_s = 120.0
+    [state_descriptions.RIDE_ELEVATOR]
+        state_module_name = "ropod_experiment_executor.commands.ride_elevator"
+        state_class_name = "RideElevator"
+        [state_descriptions.RIDE_ELEVATOR.transitions]
+            done = "EXIT_ELEVATOR"
+            failed = "FAILED"
+        [state_descriptions.RIDE_ELEVATOR.arguments]
+            destination_floor = 2
+            ride_elevator_action_topic = "/ropod_task_executor/RIDE_ELEVATOR"
+            elevator_progress_topic = "/task_progress/elevator"
+            timeout_s = 600.0
+    [state_descriptions.EXIT_ELEVATOR]
+        state_module_name = "ropod_experiment_executor.commands.exit_elevator"
+        state_class_name = "ExitElevator"
+        [state_descriptions.EXIT_ELEVATOR.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.EXIT_ELEVATOR.arguments]
+            outside_area_id = 0
+            exit_elevator_action_topic = "/ropod_task_executor/EXIT_ELEVATOR"
+            elevator_progress_topic = "/task_progress/elevator"
+            timeout_s = 120.0
