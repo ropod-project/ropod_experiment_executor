@@ -235,7 +235,7 @@ outcomes = ["DONE", "FAILED"]
         [state_descriptions.GO_TO_UNDOCKING_STATION.arguments]
             go_to_action_topic = "/ropod_task_executor/GOTO"
             go_to_progress_topic = "/task_progress/goto"
-            timeout_s = 120.0
+            timeout_s = 1200.0
     [state_descriptions.UNDOCK]
         state_module_name = "ropod_experiment_executor.commands.undock"
         state_class_name = "UnDock"
