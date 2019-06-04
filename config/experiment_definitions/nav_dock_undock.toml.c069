@@ -34,7 +34,6 @@ outcomes = ["DONE", "FAILED"]
     [state_descriptions.GO_TO_DOCKING_STATION]
         state_module_name = "ropod_experiment_executor.commands.goto"
         state_class_name = "GoTo"
-        initial_state = true
         [state_descriptions.GO_TO_DOCKING_STATION.transitions]
             done = "DOCK"
             failed = "FAILED"
@@ -45,7 +44,6 @@ outcomes = ["DONE", "FAILED"]
     [state_descriptions.DOCK]
         state_module_name = "ropod_experiment_executor.commands.dock"
         state_class_name = "Dock"
-        initial_state = true
         [state_descriptions.DOCK.transitions]
             done = "GO_TO_UNDOCKING_STATION"
             failed = "FAILED"
@@ -239,7 +237,6 @@ outcomes = ["DONE", "FAILED"]
     [state_descriptions.UNDOCK]
         state_module_name = "ropod_experiment_executor.commands.undock"
         state_class_name = "UnDock"
-        initial_state = true
         [state_descriptions.UNDOCK.transitions]
             done = "GO_HOME"
             failed = "FAILED"
@@ -279,7 +276,6 @@ outcomes = ["DONE", "FAILED"]
     [state_descriptions.GO_TO_HOME]
         state_module_name = "ropod_experiment_executor.commands.goto"
         state_class_name = "GoTo"
-        initial_state = true
         [state_descriptions.GO_TO_HOME.transitions]
             done = "DONE"
             failed = "FAILED"
