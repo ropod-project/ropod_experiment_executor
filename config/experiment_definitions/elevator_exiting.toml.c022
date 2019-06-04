@@ -1,0 +1,18 @@
+sm_id = "elevator_exiting"
+states = ["EXIT_ELEVATOR"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.EXIT_ELEVATOR]
+        state_module_name = "ropod_experiment_executor.commands.exit_elevator"
+        state_class_name = "ExitElevator"
+        initial_state = true
+        [state_descriptions.EXIT_ELEVATOR.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.EXIT_ELEVATOR.arguments]
+            outside_area_id = 60
+            outside_area_name = 'BRSU_C_L0_C9_LA2'
+            exit_elevator_action_topic = "/ropod_task_executor/EXIT_ELEVATOR"
+            elevator_progress_topic = "/task_progress/elevator"
+            timeout_s = 120.0
