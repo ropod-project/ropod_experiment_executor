@@ -47,7 +47,7 @@ class ExitElevator(CommandBase):
         action_msg.type = 'EXIT_ELEVATOR'
 
         outside_area_msg = Area()
-        outside_area_msg.id = self.outside_area_id
+        outside_area_msg.id = str(self.outside_area_id)
         outside_area_msg.name = self.outside_area_name
         outside_area_msg.type = 'local_area'
         action_msg.areas.append(outside_area_msg)
