@@ -5,7 +5,7 @@ import uuid
 
 from ropod_ros_msgs.msg import Action, TaskProgressDOCK, Status
 from ropod_ros_msgs.msg import Area, SubArea
-from ropod_ros_msgs.msg import CommandFeedback, StateInfo
+from ropod_ros_msgs.msg import ExecuteExperimentFeedback
 from ropod_experiment_executor.commands.command_base import CommandBase
 
 class Dock(CommandBase):
@@ -17,8 +17,8 @@ class Dock(CommandBase):
     @contact santosh.thoduka@h-brs.de
 
     '''
-    def __init__(self, name, **kwargs):
-        super(Dock, self).__init__(name, outcomes=['done', 'failed'])
+    def __init__(self, name, experiment_server, **kwargs):
+        super(Dock, self).__init__(name, experiment_server, outcomes=['done', 'failed'])
 
         self.area_id = kwargs.get('area_id', 'MobidikArea1')
         self.area_name = kwargs.get('area_name', 'orient_wp_MobidikArea1')
@@ -40,9 +40,9 @@ class Dock(CommandBase):
         self.area_list = []
         self.current_area_idx = 0
 
-        feedback_msg = CommandFeedback()
+        feedback_msg = ExecuteExperimentFeedback()
         feedback_msg.command_name = self.name
-        feedback_msg.state = CommandFeedback.ONGOING
+        feedback_msg.state = ExecuteExperimentFeedback.ONGOING
 
         action_msg = Action()
         action_msg.type = 'DOCK'
@@ -66,9 +66,9 @@ class Dock(CommandBase):
             rospy.sleep(0.05)
 
         if not self.action_completed: # timeout occurred
-            self.cleanup(CommandFeedback.FAILED, StateInfo.ERROR)
+            self.cleanup(ExecuteExperimentFeedback.FAILED)
             return 'failed'
-        self.cleanup(CommandFeedback.FINISHED, StateInfo.SUCCESS)
+        self.cleanup(ExecuteExperimentFeedback.FINISHED)
         return 'done'
 
     def action_progress_cb(self, progress_msg):
@@ -79,7 +79,7 @@ class Dock(CommandBase):
             progress_msg.status.status_code == Status.DOCKING_SEQUENCE_SUCCEEDED):
             self.action_completed = True
 
-    def cleanup(self, last_feedback, state):
+    def cleanup(self, last_feedback):
         '''Does the following cleanup
             - send the last feedback message
             - send the state status
@@ -88,10 +88,9 @@ class Dock(CommandBase):
         :last_feedback: int
         :state: int
         '''
-        feedback_msg = CommandFeedback()
+        feedback_msg = ExecuteExperimentFeedback()
         feedback_msg.command_name = self.name
         feedback_msg.stamp = rospy.Time.now()
         feedback_msg.state = last_feedback
         self.send_feedback(feedback_msg)
-        self.send_state(state)
         self.dock_progress_sub.unregister()
