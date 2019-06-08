@@ -1,0 +1,18 @@
+sm_id = "undock"
+states = ["UNDOCK"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.UNDOCK]
+        state_module_name = "ropod_experiment_executor.commands.undock"
+        state_class_name = "UnDock"
+        initial_state = true
+        [state_descriptions.UNDOCK.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.UNDOCK.arguments]
+            area_id = "MobidikArea1"
+            area_name = "orient_wp_MobidikArea1"
+            dock_action_topic = "/ropod_task_executor/UNDOCK"
+            dock_progress_topic = "/task_progress/dock"
+            timeout_s = 120.0
