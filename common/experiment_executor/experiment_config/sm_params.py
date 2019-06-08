@@ -14,6 +14,16 @@ class StateMachineParams(object):
         self.state_params = OrderedDict()
         self.global_params = dict()
 
+    def __repr__(self):
+        string = '{\n'
+        string += '\tid: ' + str(self.id) + ',\n'
+        string += '\tstates: ' + str(self.states) + ',\n'
+        string += '\toutcomes: ' + str(self.outcomes) + ',\n'
+        string += '\tstate_params: ' + str(self.state_params) + ',\n'
+        string += '\tglobal_params: ' + str(self.global_params) + ',\n'
+        string += '}'
+        return string
+
 class StateParams(object):
     '''Defines parameters for a single state machine state
 
@@ -27,6 +37,16 @@ class StateParams(object):
         self.state_class_name = ''
         self.transitions = dict()
         self.args = dict()
+
+    def __repr__(self):
+        string = '{\n'
+        string += '\tname: ' + str(self.name) + ',\n'
+        string += '\tstate_module_name: ' + str(self.state_module_name) + ',\n'
+        string += '\tstate_class_name: ' + str(self.state_class_name) + ',\n'
+        string += '\ttransitions: ' + str(self.transitions) + ',\n'
+        string += '\targs: ' + str(self.args) + ',\n'
+        string += '}'
+        return string
 
 class SMFileKeys(object):
     '''Defined a set of constants used in a state machine description file

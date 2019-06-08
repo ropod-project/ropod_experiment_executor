@@ -3,6 +3,7 @@ import os
 
 import rospy
 from ropod_ros_msgs.msg import ExecuteExperiment, ExperimentFeedback
+from ropod_ros_msgs.msg import Transition, TransitionList
 
 from experiment_executor.experiment_config.sm_loader import SMLoader
 from experiment_executor.experiment_config.state_machine_creator import StateMachine
@@ -14,6 +15,8 @@ class ExperimentExecutorInterface(object):
                                                    '/ropod/execute_experiment')
         experiment_feedback_topic = rospy.get_param('~experiment_feedback_topic',
                                                     '/ropod/experiment_feedback')
+        experiment_transition_topic = rospy.get_param('~experiment_transition_topic',
+                                                      '/ropod/transition_list')
 
         self.execute_experiment_sub = rospy.Subscriber(execute_experiment_topic,
                                                        ExecuteExperiment,
@@ -22,6 +25,10 @@ class ExperimentExecutorInterface(object):
         self.experiment_feedback_pub = rospy.Publisher(experiment_feedback_topic,
                                                        ExperimentFeedback,
                                                        queue_size=1)
+
+        self.transition_pub = rospy.Publisher(experiment_transition_topic,
+                                              TransitionList,
+                                              queue_size=1)
 
         self.experiment_feedback_msg = ExperimentFeedback()
 
@@ -38,6 +45,7 @@ class ExperimentExecutorInterface(object):
             return
 
         experiment_data = SMLoader.load_sm(sm_config_file)
+        self._publish_state_transitions(experiment_data)
         state_machine = StateMachine(experiment_data)
         result = state_machine.execute()
 
@@ -48,6 +56,22 @@ class ExperimentExecutorInterface(object):
         else:
             self.experiment_feedback_msg.result = ExperimentFeedback.FAILED
         self.experiment_feedback_pub.publish(self.experiment_feedback_msg)
+
+    def _publish_state_transitions(self, experiment_data):
+        """Get the transitions and publish them.
+
+        :state_machine_params: StateMachineParams
+        :returns: None
+
+        """
+        transitions = []
+        for state_name, state_param in experiment_data.state_params.items():
+            for transition_name, target_state in state_param.transitions.items():
+                transitions.append(Transition(source=state_name.encode("utf-8"),
+                                              target=target_state.encode("utf-8"),
+                                              name=transition_name.encode("utf-8")))
+        self.transition_pub.publish(TransitionList(transitions=transitions))
+
 
 if __name__ == '__main__':
     rospy.init_node('experiment_executor')
