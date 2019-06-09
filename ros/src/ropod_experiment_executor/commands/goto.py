@@ -47,7 +47,8 @@ class GoTo(CommandBase):
         feedback_msg.command_name = self.name
         feedback_msg.state = ExecuteExperimentFeedback.ONGOING
 
-        if not userdata.areas or userdata.areas == [] or not userdata.area_floor:
+        if ('areas' not in userdata.keys()) or (len(userdata.areas) == 0) or \
+                ('area_floor' not in userdata.keys()):
             self.cleanup(ExecuteExperimentFeedback.FINISHED)
             return 'done'
 

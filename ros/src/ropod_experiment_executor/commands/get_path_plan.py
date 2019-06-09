@@ -20,9 +20,12 @@ class GetPathPlan(CommandBase):
 
     '''
     def __init__(self, name, experiment_server, **kwargs):
-        super(GetPathPlan, self).__init__(name, experiment_server,
-                                          outcomes=['done', 'failed'],
-                                          output_keys=['areas', 'area_floor'])
+        super(GetPathPlan, self).__init__(
+            name,
+            experiment_server,
+            outcomes=['done', 'failed'],
+            input_keys=[],
+            output_keys=['areas', 'area_floor'])
 
         self.use_planner = kwargs.get('use_planner', True)
         if self.use_planner:
