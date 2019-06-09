@@ -1,10 +1,8 @@
 <?xml version="1.0"?>
 <launch>
     <node pkg="ropod_experiment_executor" type="experiment_executor" name="experiment_executor" ns="/ropod" output="screen">
-        <param name="cmd_feedback_topic" value="/ropod/cmd_feedback" />
-        <param name="state_info_topic" value="/ropod/state_info" />
         <param name="experiment_config_path" value="$(find ropod_experiment_executor)/config/experiment_definitions" />
-        <param name="execute_experiment_topic" value="/ropod/execute_experiment" />
-        <param name="experiment_feedback_topic" value="/ropod/experiment_feedback" />
+        <param name="experiment_server_name" value="/ropod/execute_experiment" />
+        <param name="experiment_transition_topic" value="/ropod/transition_list" />
     </node>
 </launch>

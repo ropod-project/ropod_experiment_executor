@@ -12,10 +12,12 @@ from ropod_experiment_executor.state_machine_creator import StateMachine
 class ExperimentExecutorInterface(object):
     def __init__(self):
         self.experiment_config_path = rospy.get_param('~experiment_config_path', '')
+        experiment_server_name = rospy.get_param('~experiment_server_name',
+                                                 '/ropod/execute_experiment')
         experiment_transition_topic = rospy.get_param('~experiment_transition_topic',
                                                       '/ropod/transition_list')
 
-        self.experiment_server = actionlib.SimpleActionServer('experiment_server',
+        self.experiment_server = actionlib.SimpleActionServer(experiment_server_name,
                                                               ExecuteExperimentAction,
                                                               self.execute_experiment,
                                                               False)
