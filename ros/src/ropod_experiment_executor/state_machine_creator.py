@@ -9,7 +9,7 @@ class StateMachine(smach.StateMachine):
     Email -- aleksandar.mitrevski@h-brs.de
 
     '''
-    def __init__(self, sm_data):
+    def __init__(self, sm_data, experiment_server):
         smach.StateMachine.__init__(self, outcomes=sm_data.outcomes)
 
         with self:
@@ -17,5 +17,7 @@ class StateMachine(smach.StateMachine):
                 state_class = getattr(import_module(state.state_module_name),
                                       state.state_class_name)
                 smach.StateMachine.add(state.name,
-                                       state_class(state.name, **state.args),
+                                       state_class(state.name,
+                                                   experiment_server,
+                                                   **state.args),
                                        transitions=state.transitions)

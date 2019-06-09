@@ -2,60 +2,56 @@
 import os
 
 import rospy
-from ropod_ros_msgs.msg import ExecuteExperiment, ExperimentFeedback
+import actionlib
+from ropod_ros_msgs.msg import ExecuteExperimentAction, ExecuteExperimentResult
 from ropod_ros_msgs.msg import Transition, TransitionList
 
 from experiment_executor.experiment_config.sm_loader import SMLoader
-from experiment_executor.experiment_config.state_machine_creator import StateMachine
+from ropod_experiment_executor.state_machine_creator import StateMachine
 
 class ExperimentExecutorInterface(object):
     def __init__(self):
         self.experiment_config_path = rospy.get_param('~experiment_config_path', '')
-        execute_experiment_topic = rospy.get_param('~execute_experiment_topic',
-                                                   '/ropod/execute_experiment')
-        experiment_feedback_topic = rospy.get_param('~experiment_feedback_topic',
-                                                    '/ropod/experiment_feedback')
+        experiment_server_name = rospy.get_param('~experiment_server_name',
+                                                 '/ropod/execute_experiment')
         experiment_transition_topic = rospy.get_param('~experiment_transition_topic',
                                                       '/ropod/transition_list')
 
-        self.execute_experiment_sub = rospy.Subscriber(execute_experiment_topic,
-                                                       ExecuteExperiment,
-                                                       self.execute_experiment)
-
-        self.experiment_feedback_pub = rospy.Publisher(experiment_feedback_topic,
-                                                       ExperimentFeedback,
-                                                       queue_size=1)
+        self.experiment_server = actionlib.SimpleActionServer(experiment_server_name,
+                                                              ExecuteExperimentAction,
+                                                              self.execute_experiment,
+                                                              False)
+        self.experiment_server.start()
 
         self.transition_pub = rospy.Publisher(experiment_transition_topic,
                                               TransitionList,
                                               queue_size=1)
+        self.experiment_feedback_msg = ExecuteExperimentResult()
 
-        self.experiment_feedback_msg = ExperimentFeedback()
-
-    def execute_experiment(self, msg):
+    def execute_experiment(self, goal):
         '''
         :msg: ExecuteExperiment
         :returns: None
         '''
-        sm_config_file = os.path.join(self.experiment_config_path, msg.experiment_type + '.toml')
+        sm_config_file = os.path.join(self.experiment_config_path, goal.experiment_type + '.toml')
         if not os.path.isfile(sm_config_file):
             print('[experiment_executor] Received an unknown experiment request:',
-                  ' {0}'.format(msg.experiment_type))
+                  ' {0}'.format(goal.experiment_type))
             print('[experiment_executor] Ignoring request')
             return
 
         experiment_data = SMLoader.load_sm(sm_config_file)
         self._publish_state_transitions(experiment_data)
-        state_machine = StateMachine(experiment_data)
+        state_machine = StateMachine(experiment_data, self.experiment_server)
         result = state_machine.execute()
 
         self.experiment_feedback_msg.stamp = rospy.Time.now()
-        self.experiment_feedback_msg.experiment_type = msg.experiment_type
+        self.experiment_feedback_msg.experiment_type = goal.experiment_type
         if result and result == 'DONE':
-            self.experiment_feedback_msg.result = ExperimentFeedback.FINISHED
+            self.experiment_feedback_msg.result = ExecuteExperimentResult.FINISHED
         else:
-            self.experiment_feedback_msg.result = ExperimentFeedback.FAILED
-        self.experiment_feedback_pub.publish(self.experiment_feedback_msg)
+            self.experiment_feedback_msg.result = ExecuteExperimentResult.FAILED
+        self.experiment_server.set_succeeded(self.experiment_feedback_msg)
 
     def _publish_state_transitions(self, experiment_data):
         """Get the transitions and publish them.

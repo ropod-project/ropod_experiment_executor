@@ -3,7 +3,7 @@ import time
 import rospy
 from geometry_msgs.msg import Twist
 
-from ropod_ros_msgs.msg import CommandFeedback, StateInfo
+from ropod_ros_msgs.msg import ExecuteExperimentFeedback
 from ropod_experiment_executor.commands.command_base import CommandBase
 
 class BaseMotion(CommandBase):
@@ -14,8 +14,9 @@ class BaseMotion(CommandBase):
     @contact aleksandar.mitrevski@h-brs.de
 
     '''
-    def __init__(self, name, **kwargs):
-        super(BaseMotion, self).__init__(name, outcomes=['done', 'failed'])
+    def __init__(self, name, experiment_server, **kwargs):
+        super(BaseMotion, self).__init__(name, experiment_server,
+                                         outcomes=['done', 'failed'])
         print('Creating state {0}'.format(name))
 
         self.vel_topic = kwargs.get('vel_topic', '/ropod/cmd_vel')
@@ -30,9 +31,9 @@ class BaseMotion(CommandBase):
         '''
         twist_msg = Twist()
 
-        feedback_msg = CommandFeedback()
+        feedback_msg = ExecuteExperimentFeedback()
         feedback_msg.command_name = self.name
-        feedback_msg.state = CommandFeedback.ONGOING
+        feedback_msg.state = ExecuteExperimentFeedback.ONGOING
 
         elapsed = 0.
         print('[{0}] Moving with vel: x: {1} m/s, y: {2} m/s, theta: {3} rad/s'.format(self.name, self.vel_x,
@@ -56,7 +57,6 @@ class BaseMotion(CommandBase):
         self.vel_pub.publish(twist_msg)
 
         feedback_msg.stamp = rospy.Time.now()
-        feedback_msg.state = CommandFeedback.FINISHED
+        feedback_msg.state = ExecuteExperimentFeedback.FINISHED
         self.send_feedback(feedback_msg)
-        self.send_state(StateInfo.SUCCESS)
         return 'done'

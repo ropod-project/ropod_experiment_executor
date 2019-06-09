@@ -7,7 +7,7 @@ import time
 import rospy
 from actionlib import SimpleActionClient
 
-from ropod_ros_msgs.msg import CommandFeedback, StateInfo
+from ropod_ros_msgs.msg import ExecuteExperimentFeedback
 from ropod_ros_msgs.msg import GetPathPlanAction, GetPathPlanGoal
 from ropod_experiment_executor.commands.command_base import CommandBase
 
@@ -19,8 +19,9 @@ class GetPathPlan(CommandBase):
     @maintainer Alex Mitrevski
 
     '''
-    def __init__(self, name, **kwargs):
-        super(GetPathPlan, self).__init__(name, outcomes=['done', 'failed'],
+    def __init__(self, name, experiment_server, **kwargs):
+        super(GetPathPlan, self).__init__(name, experiment_server,
+                                          outcomes=['done', 'failed'],
                                           output_keys=['areas', 'area_floor'])
 
         self.use_planner = kwargs.get('use_planner', True)
@@ -46,12 +47,11 @@ class GetPathPlan(CommandBase):
         '''
         if self.use_planner:
             if not self.source or not self.destination:
-                self.send_state(StateInfo.ERROR)
                 return 'failed'
 
-            feedback_msg = CommandFeedback()
+            feedback_msg = ExecuteExperimentFeedback()
             feedback_msg.command_name = self.name
-            feedback_msg.state = CommandFeedback.ONGOING
+            feedback_msg.state = ExecuteExperimentFeedback.ONGOING
 
             userdata.areas = []
             req = GetPathPlanGoal(
@@ -73,9 +73,8 @@ class GetPathPlan(CommandBase):
 
             if not self.action_completed: # timeout occurred
                 feedback_msg.stamp = rospy.Time.now()
-                feedback_msg.state = CommandFeedback.FINISHED
+                feedback_msg.state = ExecuteExperimentFeedback.FINISHED
                 self.send_feedback(feedback_msg)
-                self.send_state(StateInfo.SUCCESS)
                 return 'failed'
 
             areas = []
@@ -93,12 +92,11 @@ class GetPathPlan(CommandBase):
             userdata.areas = self.areas
             userdata.area_floor = self.area_floor
 
-        feedback_msg = CommandFeedback()
+        feedback_msg = ExecuteExperimentFeedback()
         feedback_msg.command_name = self.name
         feedback_msg.stamp = rospy.Time.now()
-        feedback_msg.state = CommandFeedback.FINISHED
+        feedback_msg.state = ExecuteExperimentFeedback.FINISHED
         self.send_feedback(feedback_msg)
-        self.send_state(StateInfo.SUCCESS)
         return 'done'
 
     def path_planner_cb(self, status, result):

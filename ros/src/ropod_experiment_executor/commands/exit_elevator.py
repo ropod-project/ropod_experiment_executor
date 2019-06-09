@@ -3,7 +3,7 @@ import time
 import rospy
 
 from ropod_ros_msgs.msg import Action, Area, TaskProgressELEVATOR, Status
-from ropod_ros_msgs.msg import CommandFeedback, StateInfo
+from ropod_ros_msgs.msg import ExecuteExperimentFeedback
 from ropod_experiment_executor.commands.command_base import CommandBase
 
 class ExitElevator(CommandBase):
@@ -14,8 +14,9 @@ class ExitElevator(CommandBase):
     @contact aleksandar.mitrevski@h-brs.de
 
     '''
-    def __init__(self, name, **kwargs):
-        super(ExitElevator, self).__init__(name, outcomes=['done', 'failed'])
+    def __init__(self, name, experiment_server, **kwargs):
+        super(ExitElevator, self).__init__(name, experiment_server,
+                                           outcomes=['done', 'failed'])
 
         self.outside_area_id = kwargs.get('outside_area_id', 0)
         self.outside_area_name = kwargs.get('outside_area_name', 0)
@@ -39,9 +40,9 @@ class ExitElevator(CommandBase):
         '''Sends an EXIT_ELEVATOR action and waits for it to finish. Returns "done" if
         the action finishes within "self.timeout_s" seconds; returns "failed" otherwise.
         '''
-        feedback_msg = CommandFeedback()
+        feedback_msg = ExecuteExperimentFeedback()
         feedback_msg.command_name = self.name
-        feedback_msg.state = CommandFeedback.ONGOING
+        feedback_msg.state = ExecuteExperimentFeedback.ONGOING
 
         action_msg = Action()
         action_msg.type = 'EXIT_ELEVATOR'
@@ -65,9 +66,8 @@ class ExitElevator(CommandBase):
             return 'failed'
 
         feedback_msg.stamp = rospy.Time.now()
-        feedback_msg.state = CommandFeedback.FINISHED
+        feedback_msg.state = ExecuteExperimentFeedback.FINISHED
         self.send_feedback(feedback_msg)
-        self.send_state(StateInfo.SUCCESS)
         self.elevator_progress_sub.unregister()
         return 'done'
 
@@ -84,7 +84,7 @@ class ExitElevator(CommandBase):
         publishes periodic feedback messages about the progress as well.
 
         Keyword arguments:
-        feedback_msg: ropod_ros_msgs.CommandFeedback -- a feedback message prefilled
+        feedback_msg: ropod_ros_msgs.ExecuteExperimentFeedback -- a feedback message prefilled
                       with the command name and state
 
         '''
@@ -102,13 +102,11 @@ class ExitElevator(CommandBase):
         '''Publishes a command feedbak message and sends a state info message.
 
         Keyword arguments:
-        feedback_msg: ropod_ros_msgs.CommandFeedback -- a feedback message prefilled
+        feedback_msg: ropod_ros_msgs.ExecuteExperimentFeedback -- a feedback message prefilled
                       with the command name and state
         error_str: str -- an error string to be printed on screen
 
         '''
-        print(error_str)
         feedback_msg.stamp = rospy.Time.now()
-        feedback_msg.state = CommandFeedback.FAILED
+        feedback_msg.state = ExecuteExperimentFeedback.FAILED
         self.send_feedback(feedback_msg)
-        self.send_state(StateInfo.ERROR)
