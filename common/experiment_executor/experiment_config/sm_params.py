@@ -19,7 +19,11 @@ class StateMachineParams(object):
         string += '\tid: ' + str(self.id) + ',\n'
         string += '\tstates: ' + str(self.states) + ',\n'
         string += '\toutcomes: ' + str(self.outcomes) + ',\n'
-        string += '\tstate_params: ' + str(self.state_params) + ',\n'
+        string += '\tstate_params: [\n' 
+        for state_param in self.state_params.values():
+            string += '\t'
+            string += str(state_param).replace('\n', '\n\t') + ',\n'
+        string += '\t],\n'
         string += '\tglobal_params: ' + str(self.global_params) + ',\n'
         string += '}'
         return string
