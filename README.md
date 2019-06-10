@@ -9,6 +9,8 @@ in [`mas_execution_manager`](https://github.com/b-it-bots/mas_execution_manager)
 ## Requirements
 
 - toml
+- networkx
+- matplotlib
 - [ropod_com_mediator](https://git.ropod.org/ropod/communication/ropod_com_mediator)
 - [remote_monitoring](https://git.ropod.org/ropod/execution-monitoring/remote-monitoring)
 
@@ -22,6 +24,8 @@ For path planner:
 
 ```
 pip3 install toml
+pip3 install networkx
+pip3 install matplotlib
 ```
 Install instructions for other repositories are available in their READMEs.
 
