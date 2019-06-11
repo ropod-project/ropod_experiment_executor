@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
-from os.path import join, dirname, abspath
+import sys
+from os.path import join, dirname, abspath, basename
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -38,9 +39,13 @@ def create_sm_graph(sm_params, save_image_as=None):
         plt.show()
 
 if __name__ == '__main__':
-    utils_dir = abspath(dirname(__file__))
-    root_dir = dirname(dirname(dirname(utils_dir)))
-
-    config_file = join(root_dir, 'config/experiment_definitions/linear_motion.toml')
+    if len(sys.argv) > 1:
+        config_file = sys.argv[1]
+    else:
+        print("Please provide SM config file")
+        print("Usage: python3 sm_network_creator.py ../../../config/experiment_definitions/area_navigation.toml")
+        sys.exit(1)
+    config_file = abspath(config_file)
+    file_name = basename(config_file)
     experiment_data = SMLoader.load_sm(config_file)
-    create_sm_graph(experiment_data, save_image_as=join(root_dir, 'something.png'))
+    create_sm_graph(experiment_data, save_image_as=file_name+'.png')
