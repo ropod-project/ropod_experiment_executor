@@ -12,7 +12,7 @@ outcomes = ["DONE", "FAILED"]
         [state_descriptions.ENTER_ELEVATOR.arguments]
             area_floor = 2
             elevator_id = 121
-            elevator_door_id = 96
+            elevator_door_id = 196
             wait_for_elevator_action_topic = "/ropod_task_executor/WAIT_FOR_ELEVATOR"
             enter_elevator_action_topic = "/ropod_task_executor/ENTER_ELEVATOR"
             elevator_progress_topic = "/task_progress/elevator"
