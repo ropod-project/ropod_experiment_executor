@@ -11,10 +11,8 @@ in [`mas_execution_manager`](https://github.com/b-it-bots/mas_execution_manager)
 - toml
 - networkx
 - matplotlib
-- [ropod_com_mediator](https://git.ropod.org/ropod/communication/ropod_com_mediator)
-- [remote_monitoring](https://git.ropod.org/ropod/execution-monitoring/remote-monitoring)
 
-For path planner:
+For the path planner:
 - [docker-overpass-api](https://git.ropod.org/ropod/wm/docker-overpass-api)
 - [ropod_wm_mediator](https://git.ropod.org/ropod/wm/ropod_wm_mediator)
 - [osm_bridge](https://git.ropod.org/ropod/wm/osm_bridge)
