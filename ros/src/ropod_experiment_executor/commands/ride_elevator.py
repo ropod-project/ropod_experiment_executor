@@ -34,6 +34,7 @@ class RideElevator(CommandBase):
                                                       NavElevatorFeedback,
                                                       self.action_progress_cb)
         self.action_completed = False
+        self.action_failed = False
 
         # wait for a while to give the action publishers time to initialise
         rospy.sleep(1.)
@@ -61,7 +62,7 @@ class RideElevator(CommandBase):
             self.elevator_action_server.cancel_all_goals()
             self.__report_failure(feedback_msg,
                                   '[{0}] Elevator ride preempted'.format(self.name))
-        elif not self.action_completed:
+        elif not self.action_completed or self.action_failed:
             self.__report_failure(feedback_msg,
                                   '[{0}] Elevator ride did not finish within the alloted time; giving up'.format(self.name))
             self.elevator_progress_sub.unregister()
@@ -74,11 +75,15 @@ class RideElevator(CommandBase):
         return 'done'
 
     def action_progress_cb(self, progress_msg):
-        '''Processes an elevator action progress message and modifies the value of
-        self.action_completed depending on the message status code.
+        '''Processes an elevator action progress message and modifies the values of
+        self.action_completed or self.action_failed depending on the message status code.
         '''
         if progress_msg.feedback.feedback.status.status_code == Status.GOAL_REACHED:
             self.action_completed = True
+        elif progress_msg.feedback.feedback.action_type == 'RIDE_ELEVATOR' and \
+             (progress_msg.feedback.feedback.status.status_code == Status.ELEVATOR_RIDE_TIMEOUT or \
+              progress_msg.feedback.feedback.status.status_code == Status.ELEVATOR_RIDE_MAP_CHANGE_FAILURE):
+            self.action_failed = True
 
     def __wait_for_action(self, feedback_msg):
         '''Waits for an action to either complete (self.action_completed
@@ -91,6 +96,7 @@ class RideElevator(CommandBase):
 
         '''
         self.action_completed = False
+        self.action_failed = False
         elapsed = 0.
         start_time = time.time()
         while elapsed < self.timeout_s and \

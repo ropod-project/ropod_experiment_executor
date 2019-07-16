@@ -35,6 +35,7 @@ class EnterElevator(CommandBase):
                                                       NavElevatorFeedback,
                                                       self.action_progress_cb)
         self.action_completed = False
+        self.action_failed = False
 
         # wait for a while to give the action publishers time to initialise
         rospy.sleep(1.)
@@ -82,7 +83,6 @@ class EnterElevator(CommandBase):
         action_goal.action.type = 'ENTER_ELEVATOR'
         action_goal.action.start_floor = self.area_floor
         action_goal.action.goal_floor = self.area_floor
-        self.action_completed = False
 
         print('[{0}] Entering elevator {1} at door {2}'.format(self.name,
                                                                self.elevator_id,
@@ -96,7 +96,7 @@ class EnterElevator(CommandBase):
             self.elevator_action_server.cancel_all_goals()
             self.__report_failure(feedback_msg,
                                   '[{0}] Entering elevator preempted'.format(self.name))
-        elif not self.action_completed:
+        elif not self.action_completed or self.action_failed:
             self.__report_failure(feedback_msg,
                               '[{0}] Could not enter elevator; giving up'.format(self.name))
             self.elevator_progress_sub.unregister()
@@ -109,11 +109,17 @@ class EnterElevator(CommandBase):
         return 'done'
 
     def action_progress_cb(self, progress_msg):
-        '''Processes an elevator action progress message and modifies the value of
-        self.action_completed depending on the message status code.
+        '''Processes an elevator action progress message and modifies the values of
+        self.action_completed or self.action_failed depending on the message status code.
         '''
         if progress_msg.feedback.feedback.status.status_code == Status.GOAL_REACHED:
             self.action_completed = True
+        elif progress_msg.feedback.feedback.action_type == 'WAIT_FOR_ELEVATOR' and \
+             progress_msg.feedback.feedback.status.status_code == Status.WAITING_FOR_ELEVATOR_FAILED:
+            self.action_failed = True
+        elif progress_msg.feedback.feedback.action_type == 'ENTER_ELEVATOR' and \
+             progress_msg.feedback.feedback.status.status_code == Status.ELEVATOR_ENTERING_FAILED:
+            self.action_failed = True
 
     def __wait_for_action(self, feedback_msg):
         '''Waits for an action to either complete (self.action_completed
@@ -126,10 +132,12 @@ class EnterElevator(CommandBase):
 
         '''
         self.action_completed = False
+        self.action_failed = False
         elapsed = 0.
         start_time = time.time()
         while elapsed < self.timeout_s and \
               not self.action_completed and \
+              not self.action_failed and \
               not self.experiment_server.is_preempt_requested():
             feedback_msg.stamp = rospy.Time.now()
             self.send_feedback(feedback_msg)
