@@ -62,7 +62,7 @@ class ExitElevator(CommandBase):
         # if the EXIT_ELEVATOR action could not be completed within the alloted
         # time, we send a failure feedback message and stop the experiment
         if self.experiment_server.is_preempt_requested():
-            self.elevator_action_server.set_preempted()
+            self.elevator_action_server.cancel_all_goals()
             self.__report_failure(feedback_msg,
                                   '[{0}] Exiting elevator preempted'.format(self.name))
         elif not self.action_completed:
