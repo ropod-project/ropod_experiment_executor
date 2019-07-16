@@ -45,7 +45,7 @@ outcomes = ["DONE", "FAILED"]
         state_module_name = "ropod_experiment_executor.commands.dock"
         state_class_name = "Dock"
         [state_descriptions.DOCK.transitions]
-            done = "GO_TO_UNDOCKING_STATION"
+            done = "GET_PATH_PLAN_TO_UNDOCKING_STATION"
             failed = "FAILED"
         [state_descriptions.DOCK.arguments]
             area_id = "MobidikArea2"
