@@ -5,7 +5,7 @@ import actionlib
 
 from ropod_ros_msgs.msg import Action, Status
 from ropod_ros_msgs.msg import ExecuteExperimentFeedback
-from ropod_ros_msgs.action import NavElevatorAction, NavElevatorGoal, NavElevatorFeedback
+from ropod_ros_msgs.msg import NavElevatorAction, NavElevatorGoal, NavElevatorFeedback
 from ropod_experiment_executor.commands.command_base import CommandBase
 
 class RideElevator(CommandBase):
