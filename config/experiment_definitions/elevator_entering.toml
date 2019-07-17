@@ -14,7 +14,8 @@ outcomes = ["DONE", "FAILED"]
             area_floor = 0
             elevator_id = 121
             elevator_door_id = 196
-            wait_for_elevator_action_topic = "/ropod_task_executor/WAIT_FOR_ELEVATOR"
-            enter_elevator_action_topic = "/ropod_task_executor/ENTER_ELEVATOR"
-            elevator_progress_topic = "/task_progress/elevator"
             timeout_s = 120.0
+
+[arguments]
+    elevator_action_server_name = "/ropod/take_elevator"
+    elevator_progress_topic = "/ropod/take_elevator/feedback"
