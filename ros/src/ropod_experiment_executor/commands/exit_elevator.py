@@ -23,18 +23,16 @@ class ExitElevator(CommandBase):
         self.outside_area_id = kwargs.get('outside_area_id', 0)
         self.outside_area_name = kwargs.get('outside_area_name', 0)
         self.timeout_s = kwargs.get('timeout_s', 120.)
-        self.elevator_action_server_name = kwargs.get('elevator_action_server_name',
-                                                      '/ropod/take_elevator')
+        self.action_server_name = kwargs.get('elevator_action_server_name',
+                                             '/ropod/take_elevator')
         self.elevator_progress_topic = kwargs.get('elevator_progress_topic',
                                                   '/task_progress/elevator')
 
-        self.elevator_action_server = actionlib.SimpleActionClient(self.elevator_action_server_name,
-                                                                   NavElevatorAction)
+        self.action_server = actionlib.SimpleActionClient(self.action_server_name,
+                                                          NavElevatorAction)
         self.elevator_progress_sub = rospy.Subscriber(self.elevator_progress_topic,
                                                       NavElevatorFeedback,
                                                       self.action_progress_cb)
-        self.action_completed = False
-        self.action_failed = False
 
         # wait for a while to give the action publishers time to initialise
         rospy.sleep(1.)
@@ -57,13 +55,13 @@ class ExitElevator(CommandBase):
         action_goal.action.areas.append(outside_area_msg)
 
         print('[{0}] Exiting elevator; outside area ID {1}'.format(self.name, self.outside_area_id))
-        self.elevator_action_server.send_goal(action_goal)
-        self.__wait_for_action(feedback_msg)
+        self.action_server.send_goal(action_goal)
+        self.wait_for_action_result(feedback_msg)
 
         # if the EXIT_ELEVATOR action could not be completed within the alloted
         # time, we send a failure feedback message and stop the experiment
         if self.experiment_server.is_preempt_requested():
-            self.elevator_action_server.cancel_all_goals()
+            self.action_server.cancel_all_goals()
             self.__report_failure(feedback_msg,
                                   '[{0}] Exiting elevator preempted'.format(self.name))
         elif not self.action_completed or self.action_failed:
@@ -87,30 +85,6 @@ class ExitElevator(CommandBase):
         elif progress_msg.feedback.feedback.action_type == 'EXIT_ELEVATOR' and \
              progress_msg.feedback.feedback.status.status_code == Status.ELEVATOR_EXITING_FAILED:
             self.action_failed = True
-
-    def __wait_for_action(self, feedback_msg):
-        '''Waits for an action to either complete (self.action_completed
-        will be set if that happens) or timeout (as specified by self.timeout_s);
-        publishes periodic feedback messages about the progress as well.
-
-        Keyword arguments:
-        feedback_msg: ropod_ros_msgs.ExecuteExperimentFeedback -- a feedback message prefilled
-                      with the command name and state
-
-        '''
-        self.action_completed = False
-        self.action_failed = False
-        elapsed = 0.
-        start_time = time.time()
-        while elapsed < self.timeout_s and \
-              not self.action_completed and \
-              not self.action_failed and \
-              not self.experiment_server.is_preempt_requested():
-            feedback_msg.stamp = rospy.Time.now()
-            self.send_feedback(feedback_msg)
-            elapsed = time.time() - start_time
-            rospy.sleep(0.05)
-        return self.action_completed
 
     def __report_failure(self, feedback_msg, error_str):
         '''Publishes a command feedbak message and sends a state info message.
