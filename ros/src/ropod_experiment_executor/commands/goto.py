@@ -1,8 +1,10 @@
 from __future__ import print_function
 import time
 import rospy
+import actionlib
 
-from ropod_ros_msgs.msg import Action, TaskProgressGOTO, Status
+from ropod_ros_msgs.msg import GoToAction, GoToGoal, GoToFeedback
+from ropod_ros_msgs.msg import Action, Status
 from ropod_ros_msgs.msg import Area, SubArea
 from ropod_ros_msgs.msg import ExecuteExperimentFeedback
 from ropod_experiment_executor.commands.command_base import CommandBase
@@ -20,12 +22,16 @@ class GoTo(CommandBase):
                                    outcomes=['done', 'failed'],
                                    input_keys=['areas', 'area_floor'])
 
-        self.go_to_action_topic = kwargs.get('go_to_action_topic', '/ropod_task_executor/GOTO')
-        self.go_to_progress_topic = kwargs.get('go_to_progress_topic', '/task_progress/goto')
+        self.action_server_name = kwargs.get('goto_action_server_name',
+                                             '/ropod/goto')
+        self.go_to_progress_topic = kwargs.get('go_to_progress_topic',
+                                               '/ropod/goto/feedback')
         self.timeout_s = kwargs.get('timeout_s', 120.)
-        self.go_to_action_pub = rospy.Publisher(self.go_to_action_topic, Action, queue_size=5)
+
+        self.action_server = actionlib.SimpleActionClient(self.action_server_name,
+                                                          GoToAction)
         self.go_to_progress_sub = rospy.Subscriber(self.go_to_progress_topic,
-                                                   TaskProgressGOTO,
+                                                   GoToFeedback,
                                                    self.action_progress_cb)
         self.action_completed = False
         self.area_list = []
@@ -52,10 +58,10 @@ class GoTo(CommandBase):
             self.cleanup(ExecuteExperimentFeedback.FINISHED)
             return 'done'
 
-        action_msg = Action()
-        action_msg.type = 'GOTO'
-        action_msg.start_floor = userdata.area_floor
-        action_msg.goal_floor = userdata.area_floor
+        action_goal = GoToGoal()
+        action_goal.action.type = 'GOTO'
+        action_goal.action.start_floor = userdata.area_floor
+        action_goal.action.goal_floor = userdata.area_floor
 
         for area_data in userdata.areas:
             area = area_data['area_name'].encode('ascii')
@@ -73,24 +79,26 @@ class GoTo(CommandBase):
             subarea_msg.floor_number = userdata.area_floor
 
             area_msg.sub_areas.append(subarea_msg)
-            action_msg.areas.append(area_msg)
+            action_goal.action.areas.append(area_msg)
 
         self.number_of_waypoints = len(userdata.areas)
 
         print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
-        self.go_to_action_pub.publish(action_msg)
-        self.action_completed = False
-        elapsed = 0.
-        start_time = time.time()
-        while elapsed < self.timeout_s and not self.action_completed:
-            feedback_msg.stamp = rospy.Time.now()
-            self.send_feedback(feedback_msg)
-            elapsed = time.time() - start_time
-            rospy.sleep(0.05)
+        self.action_server.send_goal(action_goal)
+        self.wait_for_action_result(feedback_msg)
 
-        if not self.action_completed: # timeout occurred
+        # if the GOTO action could not be completed within the alloted
+        # time, we send a failure feedback message and stop the experiment
+        if self.experiment_server.is_preempt_requested():
+            self.action_server.cancel_all_goals()
+            self.__report_failure(feedback_msg,
+                                  '[{0}] Waiting for elevator preempted'.format(self.name))
+        elif not self.action_completed or self.action_failed:
+            self.__report_failure(feedback_msg,
+                                  '[{0}] Elevator did not arrive within the alloted time; giving up'.format(self.name))
             self.cleanup(ExecuteExperimentFeedback.FAILED)
             return 'failed'
+
         self.cleanup(ExecuteExperimentFeedback.FINISHED)
         return 'done'
 
@@ -98,8 +106,8 @@ class GoTo(CommandBase):
         '''Processes a navigation action progress message and modifies the value of
         self.action_completed depending on the message status code.
         '''
-        if progress_msg.status.status_code == Status.GOAL_REACHED and \
-                progress_msg.sequenceNumber > 0:
+        if progress_msg.feedback.feedback.status.status_code == Status.GOAL_REACHED and \
+                progress_msg.feedback.feedback.sequenceNumber > 0:
             self.waypoint_counter += 1
             print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
             self.current_area_idx += 1
