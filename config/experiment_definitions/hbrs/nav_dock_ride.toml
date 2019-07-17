@@ -38,8 +38,6 @@ outcomes = ["DONE", "FAILED"]
             done = "DOCK"
             failed = "FAILED"
         [state_descriptions.GO_TO_DOCKING_STATION.arguments]
-            go_to_action_topic = "/ropod_task_executor/GOTO"
-            go_to_progress_topic = "/task_progress/goto"
             timeout_s = 1200.0
     [state_descriptions.DOCK]
         state_module_name = "ropod_experiment_executor.commands.dock"
@@ -141,8 +139,6 @@ outcomes = ["DONE", "FAILED"]
             done = "ENTER_ELEVATOR"
             failed = "FAILED"
         [state_descriptions.GO_TO_ELEVATOR.arguments]
-            go_to_action_topic = "/ropod_task_executor/GOTO"
-            go_to_progress_topic = "/task_progress/goto"
             timeout_s = 1200.0
     [state_descriptions.ENTER_ELEVATOR]
         state_module_name = "ropod_experiment_executor.commands.enter_elevator"
@@ -176,5 +172,7 @@ outcomes = ["DONE", "FAILED"]
             timeout_s = 120.0
 
 [arguments]
+    goto_action_server_name = "/ropod/goto"
+    goto_progress_topic = "/ropod/goto/feedback"
     elevator_action_server_name = "/ropod/take_elevator"
     elevator_progress_topic = "/ropod/take_elevator/feedback"

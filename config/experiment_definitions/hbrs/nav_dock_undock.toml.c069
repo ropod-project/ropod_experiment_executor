@@ -38,8 +38,6 @@ outcomes = ["DONE", "FAILED"]
             done = "DOCK"
             failed = "FAILED"
         [state_descriptions.GO_TO_DOCKING_STATION.arguments]
-            go_to_action_topic = "/ropod_task_executor/GOTO"
-            go_to_progress_topic = "/task_progress/goto"
             timeout_s = 1200.0
     [state_descriptions.DOCK]
         state_module_name = "ropod_experiment_executor.commands.dock"
@@ -231,8 +229,6 @@ outcomes = ["DONE", "FAILED"]
             done = "UNDOCK"
             failed = "FAILED"
         [state_descriptions.GO_TO_UNDOCKING_STATION.arguments]
-            go_to_action_topic = "/ropod_task_executor/GOTO"
-            go_to_progress_topic = "/task_progress/goto"
             timeout_s = 1200.0
     [state_descriptions.UNDOCK]
         state_module_name = "ropod_experiment_executor.commands.undock"
@@ -280,6 +276,8 @@ outcomes = ["DONE", "FAILED"]
             done = "DONE"
             failed = "FAILED"
         [state_descriptions.GO_TO_HOME.arguments]
-            go_to_action_topic = "/ropod_task_executor/GOTO"
-            go_to_progress_topic = "/task_progress/goto"
             timeout_s = 120.0
+
+[arguments]
+    goto_action_server_name = "/ropod/goto"
+    goto_progress_topic = "/ropod/goto/feedback"
