@@ -5,6 +5,7 @@ import uuid
 
 import actionlib
 from ropod_ros_msgs.msg import DockAction, DockGoal, DockFeedback
+from ropod_ros_msgs.msg import Action, TaskProgressDOCK
 from ropod_ros_msgs.msg import Area, SubArea
 from ropod_ros_msgs.msg import ExecuteExperimentFeedback
 from ropod_experiment_executor.commands.command_base import CommandBase
@@ -108,3 +109,17 @@ class Dock(CommandBase):
         feedback_msg.state = last_feedback
         self.send_feedback(feedback_msg)
         self.dock_progress_sub.unregister()
+
+    def __report_failure(self, feedback_msg, error_str):
+        '''Publishes a command feedbak message and sends a state info message.
+
+        Keyword arguments:
+        feedback_msg: ropod_ros_msgs.ExecuteExperimentFeedback -- a feedback message prefilled
+                      with the command name and state
+        error_str: str -- an error string to be printed on screen
+
+        '''
+        rospy.logerr('[{0}] {1}'.format(self.name, error_str))
+        feedback_msg.stamp = rospy.Time.now()
+        feedback_msg.state = ExecuteExperimentFeedback.FAILED
+        self.send_feedback(feedback_msg)
