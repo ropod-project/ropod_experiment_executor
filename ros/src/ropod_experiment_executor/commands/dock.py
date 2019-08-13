@@ -3,7 +3,8 @@ import time
 import rospy
 import uuid
 
-from ropod_ros_msgs.msg import Action, TaskProgressDOCK, Status
+import actionlib
+from ropod_ros_msgs.msg import DockAction, DockGoal, DockFeedback
 from ropod_ros_msgs.msg import Area, SubArea
 from ropod_ros_msgs.msg import ExecuteExperimentFeedback
 from ropod_experiment_executor.commands.command_base import CommandBase
@@ -20,12 +21,14 @@ class Dock(CommandBase):
     def __init__(self, name, experiment_server, **kwargs):
         super(Dock, self).__init__(name, experiment_server, outcomes=['done', 'failed'])
 
-        self.area_id = kwargs.get('area_id', 'MobidikArea1')
-        self.area_name = kwargs.get('area_name', 'orient_wp_MobidikArea1')
-        self.dock_action_topic = kwargs.get('dock_action_topic', '/ropod_task_executor/DOCK')
-        self.dock_progress_topic = kwargs.get('dock_progress_topic', '/task_progress/dock')
-        self.timeout_s = kwargs.get('timeout_s', 120.)
-        self.dock_action_pub = rospy.Publisher(self.dock_action_topic, Action, queue_size=5)
+        self.sub_area_id = kwargs.get('sub_area_id', '56')
+        self.sub_area_name = kwargs.get('sub_area_name', 'BRSU_C_L0_C11_LA1')
+        self.area_id = kwargs.get('area_id', '2')
+        self.area_name = kwargs.get('area_name', 'BRSU_C_L0_C11')
+        self.dock_action_server_name = kwargs.get('dock_action_server_name', '/collect_cart')
+        self.dock_progress_topic = kwargs.get('dock_progress_topic', '/collect_cart/feedback')
+        self.timeout_s = kwargs.get('timeout_s', 240.)
+        self.action_server = actionlib.SimpleActionClient(self.dock_action_server_name, DockAction)
         self.dock_progress_sub = rospy.Subscriber(self.dock_progress_topic,
                                                    TaskProgressDOCK,
                                                    self.action_progress_cb)
@@ -35,7 +38,8 @@ class Dock(CommandBase):
         rospy.sleep(1.0)
 
     def execute(self, userdata):
-        '''Sends a navigation goal for each area in self.areas.
+        '''
+        Sends a dock goal to the specified sub area
         '''
         self.area_list = []
         self.current_area_idx = 0
@@ -50,26 +54,36 @@ class Dock(CommandBase):
         area_msg = Area()
         area_msg.id = self.area_id
         area_msg.name = self.area_name
-        area_msg.sub_areas.append(SubArea())
+        sub_area = SubArea()
+        sub_area.id = self.sub_area_id
+        sub_area.name = self.sub_area_name
+        area_msg.sub_areas.append(sub_area)
         action_msg.areas.append(area_msg)
         action_msg.sub_areas.append(SubArea())
 
-        print('[{0}] Docking in area {1}'.format(self.name, self.area_id))
-        self.dock_action_pub.publish(action_msg)
-        self.action_completed = False
-        elapsed = 0.
-        start_time = time.time()
-        while elapsed < self.timeout_s and not self.action_completed:
-            feedback_msg.stamp = rospy.Time.now()
-            self.send_feedback(feedback_msg)
-            elapsed = time.time() - start_time
-            rospy.sleep(0.05)
+        action_goal = DockGoal()
+        action_goal.action = action_msg
 
-        if not self.action_completed: # timeout occurred
+        print('[{0}] Docking in area {1}, sub_area {2}'.format(self.name, self.area_id, self.sub_area_id))
+        self.action_server.send_goal(action_goal)
+        self.wait_for_action_result(feedback_msg)
+
+        # if the GOTO action could not be completed within the alloted
+        # time, we send a failure feedback message and stop the experiment
+        if self.experiment_server.is_preempt_requested():
+            self.action_server.cancel_all_goals()
+            self.__report_failure(feedback_msg,
+                                  '[{0}] dock preempted'.format(self.name))
+        elif not self.action_completed or self.action_failed:
+            self.__report_failure(feedback_msg,
+                                  '[{0}] Docking did not finish in time; giving up'.format(self.name))
             self.cleanup(ExecuteExperimentFeedback.FAILED)
             return 'failed'
+
         self.cleanup(ExecuteExperimentFeedback.FINISHED)
         return 'done'
+
+
 
     def action_progress_cb(self, progress_msg):
         '''Processes a dock action progress message and modifies the value of
