@@ -46,11 +46,13 @@ outcomes = ["DONE", "FAILED"]
             done = "GET_PATH_PLAN_TO_ELEVATOR"
             failed = "FAILED"
         [state_descriptions.DOCK.arguments]
-            area_id = "MobidikArea2"
-            area_name = "orient_wp_MobidikArea2"
-            dock_action_topic = "/ropod_task_executor/DOCK"
-            dock_progress_topic = "/task_progress/dock"
-            timeout_s = 120.0
+            area_id = "2"
+            area_name = "BRSU_C_L0_C11"
+            sub_area_id = "56"
+            sub_area_name = "BRSU_C_L0_C11_LA1"
+            dock_action_server_name = "/collect_cart"
+            dock_progress_topic = "/collect_cart/feedback"
+            timeout_s = 240.0
     [state_descriptions.GET_PATH_PLAN_TO_ELEVATOR]
         state_module_name = "ropod_experiment_executor.commands.get_path_plan"
         state_class_name = "GetPathPlan"
