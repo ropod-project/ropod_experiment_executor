@@ -35,10 +35,6 @@ class GoTo(CommandBase):
                                                    self.action_progress_cb)
         self.action_completed = False
         self.area_list = []
-        self.current_area_idx = 0
-
-        self.waypoint_counter = 0
-        self.number_of_waypoints = 0
 
         # wait for a while to give the action publisher time to initialise
         rospy.sleep(1.)
@@ -47,7 +43,6 @@ class GoTo(CommandBase):
         '''Sends a navigation goal for each area in userdata.areas.
         '''
         self.area_list = []
-        self.current_area_idx = 0
 
         feedback_msg = ExecuteExperimentFeedback()
         feedback_msg.command_name = self.name
@@ -81,9 +76,7 @@ class GoTo(CommandBase):
             area_msg.sub_areas.append(subarea_msg)
             action_goal.action.areas.append(area_msg)
 
-        self.number_of_waypoints = len(userdata.areas)
-
-        print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
+        print('[{0}] Going to first area {1}'.format(self.name, self.area_list[0]))
         self.action_server.send_goal(action_goal)
         self.wait_for_action_result(feedback_msg)
 
@@ -108,10 +101,9 @@ class GoTo(CommandBase):
         '''
         if progress_msg.feedback.feedback.status.status_code == Status.GOAL_REACHED and \
                 progress_msg.feedback.feedback.sequenceNumber > 0:
-            self.waypoint_counter += 1
-            print('[{0}] Going to {1}'.format(self.name, self.area_list[self.current_area_idx]))
-            self.current_area_idx += 1
-            if self.waypoint_counter == self.number_of_waypoints:
+            print('[{0}] Going to {1}/{2}'.format(self.name, progress_msg.feedback.feedback.sequenceNumber,
+                                                  progress_msg.feedback.feedback.totalNumber))
+            if progress_msg.feedback.feedback.sequenceNumber == progress_msg.feedback.feedback.totalNumber:
                 self.action_completed = True
 
     def cleanup(self, last_feedback):
