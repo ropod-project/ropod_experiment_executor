@@ -11,8 +11,10 @@ outcomes = ["DONE", "FAILED"]
             done = "DONE"
             failed = "FAILED"
         [state_descriptions.UNDOCK.arguments]
-            area_id = "MobidikArea1"
-            area_name = "orient_wp_MobidikArea1"
-            dock_action_topic = "/ropod_task_executor/UNDOCK"
-            dock_progress_topic = "/task_progress/dock"
-            timeout_s = 120.0
+            area_id = "2"
+            area_name = "BRSU_C_L0_C11"
+            sub_area_id = "56"
+            sub_area_name = "BRSU_C_L0_C11_LA1"
+            dock_action_server_name = "/collect_cart"
+            dock_progress_topic = "/collect_cart/feedback"
+            timeout_s = 240.0

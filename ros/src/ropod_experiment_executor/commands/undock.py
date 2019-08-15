@@ -2,6 +2,8 @@ from __future__ import print_function
 import time
 import rospy
 
+import actionlib
+from ropod_ros_msgs.msg import DockAction, DockGoal, DockFeedback
 from ropod_ros_msgs.msg import Action, TaskProgressDOCK, Status
 from ropod_ros_msgs.msg import Area, SubArea
 from ropod_ros_msgs.msg import ExecuteExperimentFeedback
@@ -20,12 +22,14 @@ class UnDock(CommandBase):
         super(UnDock, self).__init__(name, experiment_server,
                                      outcomes=['done', 'failed'])
 
-        self.area_id = kwargs.get('area_id', 'MobidikArea1')
-        self.area_name = kwargs.get('area_name', 'orient_wp_MobidikArea1')
-        self.undock_action_topic = kwargs.get('undock_action_topic', '/ropod_task_executor/UNDOCK')
-        self.undock_progress_topic = kwargs.get('undock_progress_topic', '/task_progress/dock') # the progress topic is dock not undock
-        self.timeout_s = kwargs.get('timeout_s', 120.)
-        self.undock_action_pub = rospy.Publisher(self.undock_action_topic, Action, queue_size=5)
+        self.sub_area_id = kwargs.get('sub_area_id', '56')
+        self.sub_area_name = kwargs.get('sub_area_name', 'BRSU_C_L0_C11_LA1')
+        self.area_id = kwargs.get('area_id', '2')
+        self.area_name = kwargs.get('area_name', 'BRSU_C_L0_C11')
+        self.undock_action_server_name = kwargs.get('undock_action_server_name', '/collect_cart')
+        self.undock_progress_topic = kwargs.get('undock_progress_topic', '/collect_cart/feedback')
+        self.timeout_s = kwargs.get('timeout_s', 240.)
+        self.action_server = actionlib.SimpleActionClient(self.undock_action_server_name, DockAction)
         self.undock_progress_sub = rospy.Subscriber(self.undock_progress_topic,
                                                    TaskProgressDOCK,
                                                    self.action_progress_cb)
@@ -46,27 +50,36 @@ class UnDock(CommandBase):
 
         action_msg = Action()
         action_msg.type = 'UNDOCK'
+        action_msg.action_id = str(uuid.uuid4())
         area_msg = Area()
         area_msg.id = self.area_id
         area_msg.name = self.area_name
-        area_msg.sub_areas.append(SubArea())
+        sub_area = SubArea()
+        sub_area.id = self.sub_area_id
+        sub_area.name = self.sub_area_name
+        area_msg.sub_areas.append(sub_area)
         action_msg.areas.append(area_msg)
         action_msg.sub_areas.append(SubArea())
 
-        print('[{0}] UnDocking in area {1}'.format(self.name, self.area_id))
-        self.undock_action_pub.publish(action_msg)
-        self.action_completed = False
-        elapsed = 0.
-        start_time = time.time()
-        while elapsed < self.timeout_s and not self.action_completed:
-            feedback_msg.stamp = rospy.Time.now()
-            self.send_feedback(feedback_msg)
-            elapsed = time.time() - start_time
-            rospy.sleep(0.05)
+        action_goal = DockGoal()
+        action_goal.action = action_msg
 
-        if not self.action_completed: # timeout occurred
+        print('[{0}] UnDocking in area {1}, sub_area {2}'.format(self.name, self.area_id, self.sub_area_id))
+        self.action_server.send_goal(action_goal)
+        self.wait_for_action_result(feedback_msg)
+
+        # if the DOCKk action could not be completed within the alloted
+        # time, we send a failure feedback message and stop the experiment
+        if self.experiment_server.is_preempt_requested():
+            self.action_server.cancel_all_goals()
+            self.__report_failure(feedback_msg,
+                                  '[{0}] undock preempted'.format(self.name))
+        elif not self.action_completed or self.action_failed:
+            self.__report_failure(feedback_msg,
+                                  '[{0}] Undocking did not finish in time; giving up'.format(self.name))
             self.cleanup(ExecuteExperimentFeedback.FAILED)
             return 'failed'
+
         self.cleanup(ExecuteExperimentFeedback.FINISHED)
         return 'done'
 
@@ -93,3 +106,17 @@ class UnDock(CommandBase):
         feedback_msg.state = last_feedback
         self.send_feedback(feedback_msg)
         self.undock_progress_sub.unregister()
+
+    def __report_failure(self, feedback_msg, error_str):
+        '''Publishes a command feedbak message and sends a state info message.
+
+        Keyword arguments:
+        feedback_msg: ropod_ros_msgs.ExecuteExperimentFeedback -- a feedback message prefilled
+                      with the command name and state
+        error_str: str -- an error string to be printed on screen
+
+        '''
+        rospy.logerr('[{0}] {1}'.format(self.name, error_str))
+        feedback_msg.stamp = rospy.Time.now()
+        feedback_msg.state = ExecuteExperimentFeedback.FAILED
+        self.send_feedback(feedback_msg)
