@@ -5,7 +5,7 @@ import uuid
 
 import actionlib
 from ropod_ros_msgs.msg import DockAction, DockGoal, DockFeedback
-from ropod_ros_msgs.msg import Action, TaskProgressDOCK
+from ropod_ros_msgs.msg import Action, TaskProgressDOCK, Status
 from ropod_ros_msgs.msg import Area, SubArea
 from ropod_ros_msgs.msg import ExecuteExperimentFeedback
 from ropod_experiment_executor.commands.command_base import CommandBase
@@ -90,8 +90,8 @@ class Dock(CommandBase):
         '''Processes a dock action progress message and modifies the value of
         self.action_completed depending on the message status code.
         '''
-        if (progress_msg.status.module_code == Status.MOBIDIK_COLLECTION and
-            progress_msg.status.status_code == Status.DOCKING_SEQUENCE_SUCCEEDED):
+        if (progress_msg.feedback.feedback.status.module_code == Status.MOBIDIK_COLLECTION and
+            progress_msg.feedback.feedback.status.status_code == Status.DOCKING_SEQUENCE_SUCCEEDED):
             self.action_completed = True
 
     def cleanup(self, last_feedback):

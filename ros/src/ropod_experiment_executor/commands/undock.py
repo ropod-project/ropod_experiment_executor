@@ -1,6 +1,7 @@
 from __future__ import print_function
 import time
 import rospy
+import uuid
 
 import actionlib
 from ropod_ros_msgs.msg import DockAction, DockGoal, DockFeedback
@@ -87,8 +88,8 @@ class UnDock(CommandBase):
         '''Processes an undocking action progress message and modifies the value of
         self.action_completed depending on the message status code.
         '''
-        if (progress_msg.status.module_code == Status.MOBIDIK_COLLECTION and
-            progress_msg.status.status_code == Status.UNDOCKING_SEQUENCE_SUCCEEDED):
+        if (progress_msg.feedback.feedback.status.module_code == Status.MOBIDIK_COLLECTION and
+            progress_msg.feedback.feedback.status.status_code == Status.UNDOCKING_SEQUENCE_SUCCEEDED):
             self.action_completed = True
 
     def cleanup(self, last_feedback):
