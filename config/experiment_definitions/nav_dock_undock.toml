@@ -189,11 +189,11 @@ outcomes = ["DONE", "FAILED"]
                 subarea_id = "64"
                 subarea_name = "BRSU_C_L0_C8_LA1"
             [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "2"
-                area_name = "BRSU_C_L0_C11"
+                area_id = "5"
+                area_name = "BRSU_C_L0_C9"
                 area_type = "junction"
-                subarea_id = "57"
-                subarea_name = "BRSU_C_L0_C11_LA2"
+                subarea_id = "61"
+                subarea_name = "BRSU_C_L0_C9_LA1"
     [state_descriptions.GO_TO_UNDOCKING_STATION]
         state_module_name = "ropod_experiment_executor.commands.goto"
         state_class_name = "GoTo"
@@ -209,10 +209,10 @@ outcomes = ["DONE", "FAILED"]
             done = "GO_TO_HOME"
             failed = "FAILED"
         [state_descriptions.UNDOCK.arguments]
-            area_id = "2"
-            area_name = "BRSU_C_L0_C11"
-            sub_area_id = "56"
-            sub_area_name = "BRSU_C_L0_C11_LA1"
+            area_id = "5"
+            area_name = "BRSU_C_L0_C9"
+            sub_area_id = "61"
+            sub_area_name = "BRSU_C_L0_C9_LA1"
             dock_action_server_name = "/collect_cart"
             dock_progress_topic = "/collect_cart/feedback"
             timeout_s = 240.0
