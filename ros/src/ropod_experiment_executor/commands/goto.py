@@ -85,10 +85,10 @@ class GoTo(CommandBase):
         if self.experiment_server.is_preempt_requested():
             self.action_server.cancel_all_goals()
             self.__report_failure(feedback_msg,
-                                  '[{0}] Waiting for elevator preempted'.format(self.name))
+                                  '[{0}] GOTO action preempted'.format(self.name))
         elif not self.action_completed or self.action_failed:
             self.__report_failure(feedback_msg,
-                                  '[{0}] Elevator did not arrive within the alloted time; giving up'.format(self.name))
+                                  '[{0}] Destination could not be reached within the alloted time of {1}s; giving up'.format(self.name, self.timeout_s))
             self.cleanup(ExecuteExperimentFeedback.FAILED)
             return 'failed'
 
