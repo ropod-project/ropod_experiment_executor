@@ -76,12 +76,15 @@ class RideElevator(CommandBase):
         '''Processes an elevator action progress message and modifies the values of
         self.action_completed or self.action_failed depending on the message status code.
         '''
-        if progress_msg.feedback.feedback.status.status_code == Status.GOAL_REACHED:
+        if progress_msg.feedback.feedback.action_type == 'RIDE_ELEVATOR' and \
+           progress_msg.feedback.feedback.status.status_code == Status.GOAL_REACHED:
             self.action_completed = True
+            rospy.loginfo('RIDE ELEVATOR FINISHED')
         elif progress_msg.feedback.feedback.action_type == 'RIDE_ELEVATOR' and \
              (progress_msg.feedback.feedback.status.status_code == Status.ELEVATOR_RIDE_TIMEOUT or \
               progress_msg.feedback.feedback.status.status_code == Status.ELEVATOR_RIDE_MAP_CHANGE_FAILURE):
             self.action_failed = True
+            rospy.loginfo('RIDE ELEVATOR FAILED')
 
     def __report_failure(self, feedback_msg, error_str):
         '''Publishes a command feedbak message and sends a state info message.
