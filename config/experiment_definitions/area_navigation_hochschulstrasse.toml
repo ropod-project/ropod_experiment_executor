@@ -248,7 +248,7 @@ outcomes = ["DONE", "FAILED"]
             done = "DONE"
             failed = "FAILED"
         [state_descriptions.GO_TO.arguments]
-            timeout_s = 300.0
+            timeout_s = 1200.0
 
 [arguments]
     goto_action_server_name = "/ropod/goto"
