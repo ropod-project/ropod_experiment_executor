@@ -26,6 +26,8 @@ class Dock(CommandBase):
         self.sub_area_name = kwargs.get('sub_area_name', 'BRSU_C_L0_C11_LA1')
         self.area_id = kwargs.get('area_id', '2')
         self.area_name = kwargs.get('area_name', 'BRSU_C_L0_C11')
+        self.load_type = kwargs.get('load_type', 'cart')
+        self.load_id = kwargs.get('load_id', 'cart001')
         self.dock_action_server_name = kwargs.get('dock_action_server_name', '/collect_cart')
         self.dock_progress_topic = kwargs.get('dock_progress_topic', '/collect_cart/feedback')
         self.timeout_s = kwargs.get('timeout_s', 240.)
@@ -64,8 +66,10 @@ class Dock(CommandBase):
 
         action_goal = DockGoal()
         action_goal.action = action_msg
+        action_goal.load_type = self.load_type
+        action_goal.load_id = self.load_id
 
-        print('[{0}] Docking in area {1}, sub_area {2}'.format(self.name, self.area_id, self.sub_area_id))
+        print('[{0}] Docking in area {1}, sub_area {2} to load {3}'.format(self.name, self.area_id, self.sub_area_id, self.load_id))
         self.action_server.send_goal(action_goal)
         self.wait_for_action_result(feedback_msg)
 
