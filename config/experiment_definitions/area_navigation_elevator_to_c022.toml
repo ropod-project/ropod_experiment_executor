@@ -1,0 +1,99 @@
+sm_id = "area_navigation"
+states = ["GET_PATH_PLAN", "GO_TO"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.GET_PATH_PLAN]
+        state_module_name = "ropod_experiment_executor.commands.get_path_plan"
+        state_class_name = "GetPathPlan"
+        initial_state = true
+        [state_descriptions.GET_PATH_PLAN.transitions]
+            done = "GO_TO"
+            failed = "FAILED"
+        [state_descriptions.GET_PATH_PLAN.arguments]
+            use_planner = false
+            area_floor = -1
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "125"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "area"
+                subarea_id = "120"
+                subarea_name = "BRSU_C_L0_C2_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "126"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "junction"
+                subarea_id = "119"
+                subarea_name = "BRSU_C_L0_C2_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "124"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "area"
+                subarea_id = "118"
+                subarea_name = "BRSU_C_L0_C2_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "123"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "junction"
+                subarea_id = "117"
+                subarea_name = "BRSU_C_L0_C2_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "13"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "corridor"
+                subarea_id = "76"
+                subarea_name = "BRSU_C_L0_C2_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "12"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "junction"
+                subarea_id = "75"
+                subarea_name = "BRSU_C_L0_C2_LA1"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "10"
+                area_name = "BRSU_C_L0_C4"
+                area_type = "corridor"
+                subarea_id = "71"
+                subarea_name = "BRSU_C_L0_C4_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "9"
+                area_name = "BRSU_C_L0_C5"
+                area_type = "corridor"
+                subarea_id = "69"
+                subarea_name = "BRSU_C_L0_C5_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "8"
+                area_name = "BRSU_C_L0_C6"
+                area_type = "corridor"
+                subarea_id = "67"
+                subarea_name = "BRSU_C_L0_C6_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "92"
+                area_name = "BRSU_C_L0_C7"
+                area_type = "corridor"
+                subarea_id = "65"
+                subarea_name = "BRSU_C_L0_C7_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "7"
+                area_name = "BRSU_C_L0_C8"
+                area_type = "junction"
+                subarea_id = "64"
+                subarea_name = "BRSU_C_L0_C8_LA1"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "5"
+                area_name = "BRSU_C_L0_C9"
+                area_type = "corridor"
+                subarea_id = "60"
+                subarea_name = "BRSU_C_L0_C9_LA2"
+    [state_descriptions.GO_TO]
+        state_module_name = "ropod_experiment_executor.commands.goto"
+        state_class_name = "GoTo"
+        [state_descriptions.GO_TO.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.GO_TO.arguments]
+            timeout_s = 1000.0
+
+[arguments]
+    goto_action_server_name = "/ropod/goto"
+    goto_progress_topic = "/ropod/goto/feedback"
