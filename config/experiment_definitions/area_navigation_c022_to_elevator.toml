@@ -64,7 +64,7 @@ outcomes = ["DONE", "FAILED"]
             [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "123"
                 area_name = "BRSU_C_L0_C2"
-                area_type = "area"
+                area_type = "junction"
                 subarea_id = "117"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
@@ -76,7 +76,7 @@ outcomes = ["DONE", "FAILED"]
             [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "126"
                 area_name = "BRSU_C_L0_C2"
-                area_type = "area"
+                area_type = "junction"
                 subarea_id = "119"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
@@ -88,27 +88,33 @@ outcomes = ["DONE", "FAILED"]
             [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "126"
                 area_name = "BRSU_C_L0_C2"
-                area_type = "corridor"
+                area_type = "junction"
                 subarea_id = "119"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "124"
                 area_name = "BRSU_C_L0_C2"
-                area_type = "corridor"
+                area_type = "area"
                 subarea_id = "118"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "123"
                 area_name = "BRSU_C_L0_C2"
-                area_type = "corridor"
+                area_type = "junction"
                 subarea_id = "117"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "13"
                 area_name = "BRSU_C_L0_C2"
-                area_type = "junction"
+                area_type = "corridor"
                 subarea_id = "77"
                 subarea_name = "BRSU_C_L0_C2_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "12"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "junction"
+                subarea_id = "75"
+                subarea_name = "BRSU_C_L0_C2_LA1"
             [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
                 area_id = "10"
                 area_name = "BRSU_C_L0_C4"
