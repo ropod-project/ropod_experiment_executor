@@ -79,6 +79,14 @@ class GoTo(CommandBase):
         print('[{0}] Going to first area {1}'.format(self.name, self.area_list[0]))
         self.action_server.send_goal(action_goal)
         self.wait_for_action_result(feedback_msg)
+        result = self.action_server.get_result()
+        if result:
+            if result.success:
+                self.action_completed = True
+            else:
+                self.action_failed = True
+        else:
+            self.action_failed = True
 
         # if the GOTO action could not be completed within the alloted
         # time, we send a failure feedback message and stop the experiment
