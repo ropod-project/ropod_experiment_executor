@@ -105,94 +105,88 @@ outcomes = ["DONE", "FAILED"]
                 subarea_id = "75"
                 subarea_name = "BRSU_C_L0_C2_LA1"
             [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "13"
+                area_id = "11"
                 area_name = "BRSU_C_L0_C2"
                 area_type = "corridor"
-                subarea_id = "76"
+                subarea_id = "73"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "123"
+                area_id = "116"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "junction"
+                subarea_id = "93"
+                subarea_name = "BRSU_C_L0_C2_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "287"
                 area_name = "BRSU_C_L0_C2"
                 area_type = "area"
-                subarea_id = "117"
+                subarea_id = "286"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "124"
+                area_id = "100"
                 area_name = "BRSU_C_L0_C2"
-                area_type = "area"
-                subarea_id = "118"
+                area_type = "junction"
+                subarea_id = "26"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "126"
-                area_name = "BRSU_C_L0_C2"
-                area_type = "area"
-                subarea_id = "119"
-                subarea_name = "BRSU_C_L0_C2_LA2"
-            [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "125"
-                area_name = "BRSU_C_L0_C2"
-                area_type = "area"
-                subarea_id = "120"
-                subarea_name = "BRSU_C_L0_C2_LA2"
-            [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "126"
-                area_name = "BRSU_C_L0_C2"
-                area_type = "area"
-                subarea_id = "119"
-                subarea_name = "BRSU_C_L0_C2_LA2"
-            [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "124"
-                area_name = "BRSU_C_L0_C2"
-                area_type = "area"
-                subarea_id = "118"
-                subarea_name = "BRSU_C_L0_C2_LA2"
-            [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "123"
-                area_name = "BRSU_C_L0_C2"
-                area_type = "area"
-                subarea_id = "117"
-                subarea_name = "BRSU_C_L0_C2_LA2"
-            [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "13"
+                area_id = "101"
                 area_name = "BRSU_C_L0_C2"
                 area_type = "corridor"
-                subarea_id = "77"
+                subarea_id = "27"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "10"
+                area_id = "103"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "junction"
+                subarea_id = "29"
+                subarea_name = "BRSU_C_L0_C2_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "104"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "corridor"
+                subarea_id = "32"
+                subarea_name = "BRSU_C_L0_C2_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "105"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "corridor"
+                subarea_id = "35"
+                subarea_name = "BRSU_C_L0_C2_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "106"
+                area_name = "BRSU_C_L0_C2"
+                area_type = "corridor"
+                subarea_id = "36"
+                subarea_name = "BRSU_C_L0_C2_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
+                area_id = "107"
                 area_name = "BRSU_C_L0_C4"
                 area_type = "corridor"
-                subarea_id = "71"
+                subarea_id = "39"
                 subarea_name = "BRSU_C_L0_C4_LA2"
             [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "9"
+                area_id = "108"
                 area_name = "BRSU_C_L0_C5"
                 area_type = "corridor"
-                subarea_id = "69"
+                subarea_id = "40"
                 subarea_name = "BRSU_C_L0_C5_LA2"
             [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "8"
+                area_id = "113"
                 area_name = "BRSU_C_L0_C6"
-                area_type = "corridor"
-                subarea_id = "67"
+                area_type = "junction"
+                subarea_id = "49"
                 subarea_name = "BRSU_C_L0_C6_LA2"
             [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "92"
+                area_id = "112"
                 area_name = "BRSU_C_L0_C7"
                 area_type = "corridor"
-                subarea_id = "65"
+                subarea_id = "48"
                 subarea_name = "BRSU_C_L0_C7_LA2"
             [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "7"
-                area_name = "BRSU_C_L0_C8"
-                area_type = "junction"
-                subarea_id = "64"
-                subarea_name = "BRSU_C_L0_C8_LA1"
-            [[state_descriptions.GET_PATH_PLAN_TO_UNDOCKING_STATION.arguments.areas]]
-                area_id = "5"
+                area_id = "111"
                 area_name = "BRSU_C_L0_C9"
-                area_type = "junction"
-                subarea_id = "61"
+                area_type = "corridor"
+                subarea_id = "45"
                 subarea_name = "BRSU_C_L0_C9_LA1"
     [state_descriptions.GO_TO_UNDOCKING_STATION]
         state_module_name = "ropod_experiment_executor.commands.goto"
@@ -206,51 +200,16 @@ outcomes = ["DONE", "FAILED"]
         state_module_name = "ropod_experiment_executor.commands.undock"
         state_class_name = "UnDock"
         [state_descriptions.UNDOCK.transitions]
-            done = "GO_TO_HOME"
+            done = "DONE"
             failed = "FAILED"
         [state_descriptions.UNDOCK.arguments]
-            area_id = "5"
+            area_id = "111"
             area_name = "BRSU_C_L0_C9"
-            sub_area_id = "61"
+            sub_area_id = "46"
             sub_area_name = "BRSU_C_L0_C9_LA1"
             dock_action_server_name = "/collect_cart"
             dock_progress_topic = "/collect_cart/feedback"
             timeout_s = 240.0
-    [state_descriptions.GET_PATH_PLAN_TO_HOME]
-        state_module_name = "ropod_experiment_executor.commands.get_path_plan"
-        state_class_name = "GetPathPlan"
-        [state_descriptions.GET_PATH_PLAN_TO_HOME.transitions]
-            done = "GO_TO_HOME"
-            failed = "FAILED"
-        [state_descriptions.GET_PATH_PLAN_TO_HOME.arguments]
-            use_planner = false
-            area_floor = 0
-            [[state_descriptions.GET_PATH_PLAN_TO_HOME.arguments.areas]]
-                area_id = "2"
-                area_name = "BRSU_C_L0_C11"
-                area_type = "corridor"
-                subarea_id = "56"
-                subarea_name = "BRSU_C_L0_C11_LA1"
-            [[state_descriptions.GET_PATH_PLAN_TO_HOME.arguments.areas]]
-                area_id = "7"
-                area_name = "BRSU_C_L0_C8"
-                area_type = "junction"
-                subarea_id = "64"
-                subarea_name = "BRSU_C_L0_C8_LA1"
-            [[state_descriptions.GET_PATH_PLAN_TO_HOME.arguments.areas]]
-                area_id = "5"
-                area_name = "BRSU_C_L0_C9"
-                area_type = "corridor"
-                subarea_id = "60"
-                subarea_name = "BRSU_C_L0_C9_LA2"
-    [state_descriptions.GO_TO_HOME]
-        state_module_name = "ropod_experiment_executor.commands.goto"
-        state_class_name = "GoTo"
-        [state_descriptions.GO_TO_HOME.transitions]
-            done = "DONE"
-            failed = "FAILED"
-        [state_descriptions.GO_TO_HOME.arguments]
-            timeout_s = 120.0
 
 [arguments]
     goto_action_server_name = "/ropod/goto"
