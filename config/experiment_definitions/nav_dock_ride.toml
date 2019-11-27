@@ -46,11 +46,13 @@ outcomes = ["DONE", "FAILED"]
             done = "GET_PATH_PLAN_TO_ELEVATOR"
             failed = "FAILED"
         [state_descriptions.DOCK.arguments]
-            area_id = "MobidikArea2"
-            area_name = "orient_wp_MobidikArea2"
-            dock_action_topic = "/ropod_task_executor/DOCK"
-            dock_progress_topic = "/task_progress/dock"
-            timeout_s = 120.0
+            area_id = "2"
+            area_name = "BRSU_C_L0_C11"
+            sub_area_id = "56"
+            sub_area_name = "BRSU_C_L0_C11_LA1"
+            dock_action_server_name = "/collect_cart"
+            dock_progress_topic = "/collect_cart/feedback"
+            timeout_s = 240.0
     [state_descriptions.GET_PATH_PLAN_TO_ELEVATOR]
         state_module_name = "ropod_experiment_executor.commands.get_path_plan"
         state_class_name = "GetPathPlan"
@@ -61,11 +63,11 @@ outcomes = ["DONE", "FAILED"]
             use_planner = false
             area_floor = 0
             [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
-                area_id = "2"
-                area_name = "BRSU_C_L0_C11"
+                area_id = "5"
+                area_name = "BRSU_C_L0_C9"
                 area_type = "corridor"
-                subarea_id = "56"
-                subarea_name = "BRSU_C_L0_C11_LA1"
+                subarea_id = "61"
+                subarea_name = "BRSU_C_L0_C9_LA1"
             [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
                 area_id = "7"
                 area_name = "BRSU_C_L0_C8"
@@ -104,26 +106,26 @@ outcomes = ["DONE", "FAILED"]
                 subarea_name = "BRSU_C_L0_C2_LA1"
             [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
                 area_id = "13"
-                area_name = "BRSU_C_L0_C2"
+                area_name = "BRSU_C_L0_C1"
                 area_type = "corridor"
-                subarea_id = "76"
-                subarea_name = "BRSU_C_L0_C2_LA2"
+                subarea_id = "77"
+                subarea_name = "BRSU_C_L0_C1_LA1"
             [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
                 area_id = "123"
                 area_name = "BRSU_C_L0_C2"
-                area_type = "area"
+                area_type = "junction"
                 subarea_id = "117"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
                 area_id = "124"
-                area_name = "BRSU_C_L0_C2"
+                area_name = "BRSU_A_L0_C2"
                 area_type = "area"
                 subarea_id = "118"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
                 area_id = "126"
                 area_name = "BRSU_C_L0_C2"
-                area_type = "area"
+                area_type = "junction"
                 subarea_id = "119"
                 subarea_name = "BRSU_C_L0_C2_LA2"
             [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
