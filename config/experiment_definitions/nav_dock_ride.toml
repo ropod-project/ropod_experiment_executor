@@ -63,11 +63,11 @@ outcomes = ["DONE", "FAILED"]
             use_planner = false
             area_floor = 0
             [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
-                area_id = "5"
-                area_name = "BRSU_C_L0_C9"
+                area_id = "2"
+                area_name = "BRSU_C_L0_C11"
                 area_type = "corridor"
-                subarea_id = "61"
-                subarea_name = "BRSU_C_L0_C9_LA1"
+                subarea_id = "56"
+                subarea_name = "BRSU_C_L0_C11_LA1"
             [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
                 area_id = "7"
                 area_name = "BRSU_C_L0_C8"
