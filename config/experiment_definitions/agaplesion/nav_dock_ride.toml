@@ -1,0 +1,214 @@
+sm_id = "nav_dock_ride"
+states = ["DOCK", "GET_PATH_PLAN_TO_ELEVATOR", "GO_TO_ELEVATOR", "ENTER_ELEVATOR", "RIDE_ELEVATOR", "EXIT_ELEVATOR"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.DOCK]
+        state_module_name = "ropod_experiment_executor.commands.dock"
+        state_class_name = "Dock"
+        initial_state = true
+        [state_descriptions.DOCK.transitions]
+            done = "GET_PATH_PLAN_TO_ELEVATOR"
+            failed = "FAILED"
+        [state_descriptions.DOCK.arguments]
+            area_id = "118"
+            area_name = "AMK_D_L-1_C41"
+            sub_area_id = "92"
+            sub_area_name = "AMK_D_L-1_C41_LA1"
+            dock_action_server_name = "/collect_cart"
+            dock_progress_topic = "/collect_cart/feedback"
+            timeout_s = 240.0
+    [state_descriptions.GET_PATH_PLAN_TO_ELEVATOR]
+        state_module_name = "ropod_experiment_executor.commands.get_path_plan"
+        state_class_name = "GetPathPlan"
+        [state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.transitions]
+            done = "GO_TO_ELEVATOR"
+            failed = "FAILED"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "118"
+                area_name = "AMK_D_L-1_C41"
+                area_type = "corridor"
+                subarea_id = "92"
+                subarea_name = "AMK_D_L-1_C41_LA1"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "119"
+                area_name = "AMK_D_L-1_C40"
+                area_type = "corridor"
+                subarea_id = "93"
+                subarea_name = "AMK_D_L-1_C40_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "120"
+                area_name = "AMK_D_L-1_C39"
+                area_type = "junction"
+                subarea_id = "95"
+                subarea_name = "AMK_D_L-1_C39_LA1"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "121"
+                area_name = "AMK_C_L-1_C38"
+                area_type = "corridor"
+                subarea_id = "96"
+                subarea_name = "AMK_C_L-1_C38_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "122"
+                area_name = "AMK_C_L-1_C37"
+                area_type = "corridor"
+                subarea_id = "98"
+                subarea_name = "AMK_C_L-1_C37_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "123"
+                area_name = "AMK_C_L-1_C36"
+                area_type = "corridor"
+                subarea_id = "100"
+                subarea_name = "AMK_C_L-1_C36_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "124"
+                area_name = "AMK_C_L-1_C35"
+                area_type = "corridor"
+                subarea_id = "102"
+                subarea_name = "AMK_C_L-1_C35_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "125"
+                area_name = "AMK_C_L-1_C34"
+                area_type = "corridor"
+                subarea_id = "104"
+                subarea_name = "AMK_C_L-1_C34_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "126"
+                area_name = "AMK_B_L-1_C33"
+                area_type = "corridor"
+                subarea_id = "71"
+                subarea_name = "AMK_B_L-1_C33_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "127"
+                area_name = "AMK_B_L-1_C32"
+                area_type = "corridor"
+                subarea_id = "73"
+                subarea_name = "AMK_B_L-1_C32_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "128"
+                area_name = "AMK_B_L-1_C31"
+                area_type = "corridor"
+                subarea_id = "75"
+                subarea_name = "AMK_B_L-1_C31_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "129"
+                area_name = "AMK_B_L-1_C30"
+                area_type = "corridor"
+                subarea_id = "77"
+                subarea_name = "AMK_B_L-1_C30_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "130"
+                area_name = "AMK_B_L-1_C29"
+                area_type = "corridor"
+                subarea_id = "82"
+                subarea_name = "AMK_B_L-1_C29_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "131"
+                area_name = "AMK_B_L-1_C28"
+                area_type = "corridor"
+                subarea_id = "80"
+                subarea_name = "AMK_B_L-1_C28_LA1"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "132"
+                area_name = "AMK_B_L-1_C27"
+                area_type = "junction"
+                subarea_id = "81"
+                subarea_name = "AMK_B_L-1_C27_LA1"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "134"
+                area_name = "AMK_B_L-1_C26"
+                area_type = "corridor"
+                subarea_id = "84"
+                subarea_name = "AMK_B_L-1_C26_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "135"
+                area_name = "AMK_B_L-1_C24"
+                area_type = "corridor"
+                subarea_id = "88"
+                subarea_name = "AMK_B_L-1_C24_LA2"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "139"
+                area_name = "AMK_B_L-1_C15"
+                area_type = "junction"
+                subarea_id = "36"
+                subarea_name = "AMK_B_L-1_C15_LA1"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "172"
+                area_name = "AMK_B_L-1_C16"
+                area_type = "corridor"
+                subarea_id = "35"
+                subarea_name = "AMK_B_L-1_C16_LA1"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "137"
+                area_name = "AMK_B_L-1_C17"
+                area_type = "corridor"
+                subarea_id = "33"
+                subarea_name = "AMK_B_L-1_C17_LA1"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "111"
+                area_name = "AMK_B_L-1_C5"
+                area_type = "junction"
+                subarea_id = "62"
+                subarea_name = "AMK_B_L-1_C5_LA1"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "112"
+                area_name = "AMK_B_L-1_C4"
+                area_type = "corridor"
+                subarea_id = "64"
+                subarea_name = "AMK_B_L-1_C4_LA1"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "113"
+                area_name = "AMK_B_L-1_C3"
+                area_type = "junction"
+                subarea_id = "66"
+                subarea_name = "AMK_B_L-1_C3_LA1"
+            [[state_descriptions.GET_PATH_PLAN_TO_ELEVATOR.arguments.areas]]
+                area_id = "114"
+                area_name = "AMK_B_L-1_C2"
+                area_type = "corridor"
+                subarea_id = "68"
+                subarea_name = "AMK_B_L-1_C2_LA1"
+    [state_descriptions.GO_TO_ELEVATOR]
+        state_module_name = "ropod_experiment_executor.commands.goto"
+        state_class_name = "GoTo"
+        [state_descriptions.GO_TO_ELEVATOR.transitions]
+            done = "ENTER_ELEVATOR"
+            failed = "FAILED"
+        [state_descriptions.GO_TO_ELEVATOR.arguments]
+            timeout_s = 1200.0
+    [state_descriptions.ENTER_ELEVATOR]
+        state_module_name = "ropod_experiment_executor.commands.enter_elevator"
+        state_class_name = "EnterElevator"
+        [state_descriptions.ENTER_ELEVATOR.transitions]
+            done = "RIDE_ELEVATOR"
+            failed = "FAILED"
+        [state_descriptions.ENTER_ELEVATOR.arguments]
+            area_floor = -1
+            elevator_id = 163
+            elevator_door_id = 161
+            timeout_s = 120.0
+    [state_descriptions.RIDE_ELEVATOR]
+        state_module_name = "ropod_experiment_executor.commands.ride_elevator"
+        state_class_name = "RideElevator"
+        [state_descriptions.RIDE_ELEVATOR.transitions]
+            done = "EXIT_ELEVATOR"
+            failed = "FAILED"
+        [state_descriptions.RIDE_ELEVATOR.arguments]
+            destination_floor = 4
+            timeout_s = 600.0
+    [state_descriptions.EXIT_ELEVATOR]
+        state_module_name = "ropod_experiment_executor.commands.exit_elevator"
+        state_class_name = "ExitElevator"
+        [state_descriptions.EXIT_ELEVATOR.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.EXIT_ELEVATOR.arguments]
+            outside_area_id = 9
+            outside_area_name = 'AMK_B_L4_C0_LA1'
+            timeout_s = 120.0
+
+[arguments]
+    goto_action_server_name = "/ropod/goto"
+    goto_progress_topic = "/ropod/goto/feedback"
+    elevator_action_server_name = "/ropod/take_elevator"
+    elevator_progress_topic = "/ropod/take_elevator/feedback"
