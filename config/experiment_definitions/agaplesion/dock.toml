@@ -1,0 +1,20 @@
+sm_id = "dock"
+states = ["DOCK"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.DOCK]
+        state_module_name = "ropod_experiment_executor.commands.dock"
+        state_class_name = "Dock"
+        initial_state = true
+        [state_descriptions.DOCK.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.DOCK.arguments]
+            area_id = "131"
+            area_name = "AMK_B_L-1_C28"
+            sub_area_id = "80"
+            sub_area_name = "AMK_B_L-1_C28_LA1"
+            dock_action_server_name = "/collect_cart"
+            dock_progress_topic = "/collect_cart/feedback"
+            timeout_s = 120.0
