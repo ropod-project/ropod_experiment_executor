@@ -1,0 +1,91 @@
+sm_id = "area_navigation"
+states = ["GET_PATH_PLAN", "GO_TO"]
+outcomes = ["DONE", "FAILED"]
+
+[state_descriptions]
+    [state_descriptions.GET_PATH_PLAN]
+        state_module_name = "ropod_experiment_executor.commands.get_path_plan"
+        state_class_name = "GetPathPlan"
+        initial_state = true
+        [state_descriptions.GET_PATH_PLAN.transitions]
+            done = "GO_TO"
+            failed = "FAILED"
+        [state_descriptions.GET_PATH_PLAN.arguments]
+            use_planner = false
+            area_floor = -1
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "131"
+                area_name = "AMK_B_L-1_C28"
+                area_type = "corridor"
+                subarea_id = "80"
+                subarea_name = "AMK_B_L-1_C28_LA1"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "132"
+                area_name = "AMK_B_L-1_C27"
+                area_type = "junction"
+                subarea_id = "81"
+                subarea_name = "AMK_B_L-1_C27_LA1"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "134"
+                area_name = "AMK_B_L-1_C26"
+                area_type = "corridor"
+                subarea_id = "84"
+                subarea_name = "AMK_B_L-1_C26_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "135"
+                area_name = "AMK_B_L-1_C24"
+                area_type = "corridor"
+                subarea_id = "88"
+                subarea_name = "AMK_B_L-1_C24_LA2"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "139"
+                area_name = "AMK_B_L-1_C15"
+                area_type = "junction"
+                subarea_id = "36"
+                subarea_name = "AMK_B_L-1_C15_LA1"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "172"
+                area_name = "AMK_B_L-1_C16"
+                area_type = "corridor"
+                subarea_id = "35"
+                subarea_name = "AMK_B_L-1_C16_LA1"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "137"
+                area_name = "AMK_B_L-1_C17"
+                area_type = "corridor"
+                subarea_id = "33"
+                subarea_name = "AMK_B_L-1_C17_LA1"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "111"
+                area_name = "AMK_B_L-1_C5"
+                area_type = "junction"
+                subarea_id = "62"
+                subarea_name = "AMK_B_L-1_C5_LA1"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "112"
+                area_name = "AMK_B_L-1_C4"
+                area_type = "corridor"
+                subarea_id = "64"
+                subarea_name = "AMK_B_L-1_C4_LA1"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "113"
+                area_name = "AMK_B_L-1_C3"
+                area_type = "junction"
+                subarea_id = "66"
+                subarea_name = "AMK_B_L-1_C3_LA1"
+            [[state_descriptions.GET_PATH_PLAN.arguments.areas]]
+                area_id = "114"
+                area_name = "AMK_B_L-1_C2"
+                area_type = "corridor"
+                subarea_id = "68"
+                subarea_name = "AMK_B_L-1_C2_LA1"
+    [state_descriptions.GO_TO]
+        state_module_name = "ropod_experiment_executor.commands.goto"
+        state_class_name = "GoTo"
+        [state_descriptions.GO_TO.transitions]
+            done = "DONE"
+            failed = "FAILED"
+        [state_descriptions.GO_TO.arguments]
+            go_to_action_topic = "/ropod_task_executor/GOTO"
+            go_to_progress_topic = "/task_progress/goto"
+            timeout_s = 120.0
