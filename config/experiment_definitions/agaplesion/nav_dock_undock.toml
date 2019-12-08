@@ -6,6 +6,7 @@ outcomes = ["DONE", "FAILED"]
     [state_descriptions.DOCK]
         state_module_name = "ropod_experiment_executor.commands.dock"
         state_class_name = "Dock"
+        initial_state = true
         [state_descriptions.DOCK.transitions]
             done = "GET_PATH_PLAN_TO_UNDOCKING_STATION"
             failed = "FAILED"
